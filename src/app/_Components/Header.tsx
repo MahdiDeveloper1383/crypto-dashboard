@@ -12,7 +12,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">
         
         {/* Logo & Site Name */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center mr-8 gap-4">
           <Image
             src="/assets/257-2574815_crypto-com-logo-svg-hd-png-download.png"
             alt="Crypto Land Logo"

@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     const res = await axios(cgUrl, {
       headers: {
         "x-cg-demo-api-key": "CG-3zw8oqXXv22GGR749vbqDrh4",
-      },
+      }
     });
 
     if (!res) throw new Error("Failed to fetch from CoinGecko");
