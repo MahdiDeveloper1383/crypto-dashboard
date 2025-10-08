@@ -1,4 +1,8 @@
+'use client'
+import { UseGlobal } from "../Hooks/react-query/UseGlobal";
+
 export default function GlobalMarketTable() {
+    const {data,error,isLoading} = UseGlobal()
   return (
     <div className="flex justify-center mt-12">
       <div className="overflow-x-auto shadow-lg rounded-2xl border border-gray-200 bg-white w-full max-w-6xl">
@@ -18,14 +22,14 @@ export default function GlobalMarketTable() {
 
           <tbody>
             <tr className="bg-gray-50 hover:bg-gray-100 transition-colors text-center">
-              <td className="border-t px-4 py-3 font-medium text-gray-800">13,690</td>
-              <td className="border-t px-4 py-3">1,046</td>
-              <td className="border-t px-4 py-3 text-green-600 font-semibold">$2.72 Trillion</td>
-              <td className="border-t px-4 py-3 text-blue-600 font-semibold">$69.3 Billion</td>
-              <td className="border-t px-4 py-3 text-emerald-600 font-semibold">+1.72%</td>
-              <td className="border-t px-4 py-3 text-yellow-600">50.4%</td>
-              <td className="border-t px-4 py-3 text-indigo-600">14.9%</td>
-              <td className="border-t px-4 py-3 text-gray-500">2025-10-08</td>
+              <td className="border-t px-4 py-3 font-medium text-gray-800">{data?.data.active_cryptocurrencies}</td>
+              <td className="border-t px-4 py-3">{data?.data.markets}</td>
+              <td className="border-t px-4 py-3 text-green-600 font-semibold">${data?.data.total_market_cap.usd.toFixed(2)}</td>
+              <td className="border-t px-4 py-3 text-blue-600 font-semibold">${data?.data.total_volume.usd.toLocaleString()} </td>
+              <td className="border-t px-4 py-3 text-emerald-600 font-semibold">%{data?.data.market_cap_change_percentage_24h_usd.toFixed(2)}</td>
+              <td className="border-t px-4 py-3 text-yellow-600">%{data?.data.market_cap_percentage.btc.toFixed(2)}</td>
+              <td className="border-t px-4 py-3 text-indigo-600">%{data?.data.market_cap_percentage.eth.toFixed(2)}</td>
+              <td className="border-t px-4 py-3 text-gray-500">2025-06-28</td>
             </tr>
           </tbody>
         </table>

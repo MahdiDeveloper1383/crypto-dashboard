@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 
 export default function ThemeWrapper({ children }: { children: ReactNode }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="light" >
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange >
       {children}
     </ThemeProvider>
   );
