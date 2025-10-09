@@ -14,13 +14,12 @@ export default function TopCoins() {
     ?.sort(
       (a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h
     )
-    .slice(0, 10);
+    .slice(0, 12);
   const TopLosers = coins
     ?.sort(
       (a, b) => a.price_change_percentage_24h - b.price_change_percentage_24h
     )
-    .slice(0, 10);
- 
+    .slice(0, 12);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
@@ -72,19 +71,26 @@ export default function TopCoins() {
             <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">
               Global Market Cap
             </h3>
+
             <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-gray-400 gap-5">
               {charts?.coins.map((chart, index) => (
-                <Chart
-                  key={index}
-                  data={convertToMarketPoint(chart)}
-                  showMarketCap
-                  height={300}
-                />
+                <div className="w-full">
+                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2 text-center">
+                    {chart_coins[index].toUpperCase()}
+                  </h4>
+                  <Chart
+                    key={index}
+                    data={convertToMarketPoint(chart)}
+                    showMarketCap
+                    height={300}
+                  />
+                </div>
               ))}
             </div>
           </div>
         </>
       )}
+      <div></div>
     </div>
   );
 }

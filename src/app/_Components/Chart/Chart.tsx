@@ -55,7 +55,7 @@ export default function Chart({
           {showMarketCap && (
             <Line
               type="monotone"
-              dataKey="market_caps"
+              dataKey="marketCap"
               stroke="#0984e3"
               strokeWidth={2}
               dot={false}
@@ -67,7 +67,7 @@ export default function Chart({
           {showVolume && (
             <Line
               type="monotone"
-              dataKey="total_volumes"
+              dataKey="volume"
               stroke="#e17055"
               strokeWidth={2}
               dot={false}

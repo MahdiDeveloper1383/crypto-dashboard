@@ -12,13 +12,11 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* برای تم روشن */
 :root, .light {
   --background: #ffffff;
   --foreground: #171717;
 }
 
-/* برای تم تاریک */
 .dark {
   --background: #0a0a0a;
   --foreground: #ededed;
@@ -31,10 +29,3 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* حذف media query زیرا با next-themes کار نمی‌کند */
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-} */
