@@ -6,6 +6,9 @@ export default function GlobalMarketTable() {
   return (
     <div className="flex justify-center mt-12">
       <div className="overflow-x-auto shadow-lg rounded-2xl border border-gray-200 bg-white w-full max-w-6xl">
+        {error && <p className="text-3xl text-red-600 text-center">fetching data faild</p>}
+        {isLoading && <p className="text-3xl text-yellow-300 text-center">Is Loading...</p>}
+        {!error && !isLoading &&
         <table className="min-w-full border-collapse text-sm text-gray-700">
           <thead className="bg-gradient-to-r from-indigo-500 to-blue-800 text-white text-center">
             <tr>
@@ -33,6 +36,7 @@ export default function GlobalMarketTable() {
             </tr>
           </tbody>
         </table>
+        }
       </div>
     </div>
   );
