@@ -3,7 +3,7 @@ export interface MarketPoint {
   value: number;
 }
 
-export interface MarketChartData {
+export interface ChartData {
   prices: MarketPoint[];
   market_caps: MarketPoint[];
   total_volumes: MarketPoint[];

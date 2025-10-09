@@ -12,7 +12,7 @@ import {
   Legend,
 } from 'recharts'
 
-interface MarketChartProps {
+interface ChartProps {
   data: MarketPoint[]
   showMarketCap?: boolean
   showVolume?: boolean
@@ -20,13 +20,15 @@ interface MarketChartProps {
   height?: number
 }
 
-export default function MarketChart({
+
+
+export default function Chart({
   data,
   showMarketCap = false,
   showVolume = false,
   showPrice = false,
   height = 400
-}: MarketChartProps) {
+}:ChartProps) {
   if (!data || data.length === 0) return <p className="text-center">No data available</p>
 
   return (
@@ -53,7 +55,7 @@ export default function MarketChart({
           {showMarketCap && (
             <Line
               type="monotone"
-              dataKey="marketCap"
+              dataKey="market_caps"
               stroke="#0984e3"
               strokeWidth={2}
               dot={false}
@@ -65,7 +67,7 @@ export default function MarketChart({
           {showVolume && (
             <Line
               type="monotone"
-              dataKey="volume"
+              dataKey="total_volumes"
               stroke="#e17055"
               strokeWidth={2}
               dot={false}
