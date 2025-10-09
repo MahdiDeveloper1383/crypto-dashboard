@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
 
     const res = await axios(cgUrl, {
       headers: {
-        "x-cg-demo-api-key": "CG-3zw8oqXXv22GGR749vbqDrh4",
+        "x-cg-demo-api-key": "CG-3zw8oqXXv22GGR749vbqDrh4"
       }
     });
 
@@ -29,7 +29,6 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(res.data);
   } catch (err) {
-    console.error(err);
     return NextResponse.json({ error: "Failed to fetch market data" }, { status: 500 });
   }
 }

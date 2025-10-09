@@ -1,41 +1,99 @@
-import React from 'react'
+"use client";
+import React from "react";
+import { UseMarket } from "../Hooks/react-query/UseMarket";
+import { UseChart,} from "../Hooks/react-query/UseCharts";
+import MarketChart from "./Chart/MarketChart";
+import { MarketPoint } from "../interfaces/chart";
 
 export default function TopCoins() {
+  const { data:coins, error, isLoading } = UseMarket();
+  const chart_coins = ["bitcoin", "ethereum", "solana"];
+
+  const { data:charts} = UseChart(chart_coins)
+  const TopGainers = coins
+    ?.sort(
+      (a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h
+    )
+    .slice(0, 10);
+  const TopLosers = coins
+    ?.sort(
+      (a, b) => a.price_change_percentage_24h - b.price_change_percentage_24h
+    )
+    .slice(0, 10);
+    function convertToMarketPoint(chart: {
+  prices: [number, number][]
+  market_caps: [number, number][]
+  total_volumes: [number, number][]
+}): MarketPoint[] {
+  return chart.prices.map((p, i) => ({
+    timestamp: p[0],
+    value: p[1],
+    marketCap: chart.market_caps[i]?.[1],
+    volume: chart.total_volumes[i]?.[1],
+  }));
+}
+
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10 pl-52">
-  <div className="bg-linear-to-r from-green-500 to-green-600 dark:bg-gray-800 rounded-2xl p-5 shadow-lg hover:shadow-xl transition">
-    <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">Top Gainers (24h)</h3>
-    <ul className="space-y-2">
-      <li className="flex justify-between">
-        <span className="text-gray-600 dark:text-gray-300">Solana (SOL)</span>
-        <span className="text-green-500 font-bold">+12.5%</span>
-      </li>
-      <li className="flex justify-between">
-        <span className="text-gray-600 dark:text-gray-300">Avalanche (AVAX)</span>
-        <span className="text-green-500 font-bold">+9.8%</span>
-      </li>
-    </ul>
-  </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+        {error && (
+            <h1 className="text-4xl text-red-500">Error fetching users.</h1>
+        )}
+        {isLoading && (
+            <h1 className="text-4xl  text-yellow-400">Is Loading...</h1>
+        )}
+        {!error && !isLoading && (
+            <>
+            <div className="bg-linear-to-r from-green-500 to-green-600 dark:bg-gray-800 rounded-2xl p-5 shadow-lg hover:shadow-xl transition">
+        <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">
+          Top Gainers (24h)
+        </h3>
+        <ul className="space-y-2">
+          {TopGainers?.map((coin) => (
+              <li key={coin.id} className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-300">
+                {coin.name} ({coin.symbol})
+              </span>
+              <span className="text-green-500 font-bold">
+                %{coin.price_change_percentage_24h.toFixed(2)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
 
+      <div className="bg-linear-to-r from-red-400  to-red-500 dark:bg-gray-800 rounded-2xl p-5 shadow-lg hover:shadow-xl transition">
+        <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">
+          Top Losers (24h)
+        </h3>
+        <ul className="space-y-2">
+          {TopLosers?.map((coin) => (
+              <li key={coin.id} className="flex justify-between">
+              <span className="text-gray-600 dark:text-gray-300">
+                {coin.name} ({coin.symbol})
+              </span>
+              <span className="text-red-800 font-bold">
+                %{coin.price_change_percentage_24h.toFixed(2)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
 
-  <div className="bg-linear-to-r from-red-600  to-red-700 dark:bg-gray-800 rounded-2xl p-5 shadow-lg hover:shadow-xl transition">
-    <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">Top Losers (24h)</h3>
-    <ul className="space-y-2">
-      <li className="flex justify-between">
-        <span className="text-gray-600 dark:text-gray-300">Doge (DOGE)</span>
-        <span className="text-red-500 font-bold">-5.2%</span>
-      </li>
-    </ul>
-  </div>
-
-
-  <div className="bg-linear-to-r from-white to-gray-500 dark:bg-gray-800 rounded-2xl p-5 shadow-lg hover:shadow-xl transition flex flex-col">
-    <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">Global Market Cap</h3>
-    <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-gray-400">
-      [Chart Placeholder]
+      <div className="bg-linear-to-r from-white to-gray-500 dark:bg-gray-800 rounded-2xl p-5 shadow-lg hover:shadow-xl transition flex flex-col">
+        <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">
+          Global Market Cap
+        </h3>
+        <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-gray-400 gap-5">
+         {
+            charts?.coins.map((chart,index)=>(
+                <MarketChart key={index} data={chart.market_caps} showMarketCap height={300} />
+            ))
+         }
+        </div>
+      </div>
+          </>
+    )}
     </div>
-  </div>
-</div>
-
-  )
+  );
 }
