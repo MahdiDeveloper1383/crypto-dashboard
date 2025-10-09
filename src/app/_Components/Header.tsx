@@ -46,7 +46,7 @@ export default function Header() {
                 onChange={() => setTheme(theme === "dark" ? "light" : "dark")}
               />
               <div className={`w-14 h-8  dark:bg-gray-700 rounded-full shadow-inner ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-300'}`}></div>
-              <div className={`dot absolute left-1 top-1 w-6 h-6 bg-white dark:bg-gray-900 rounded-full transition-transform ${
+              <div className={` absolute left-1 top-1 w-6 h-6 bg-white dark:bg-gray-900 rounded-full transition-transform delay-200 duration-500 ease-in-out ${
                   theme === 'dark' ? "translate-x-full" : "translate-x-0"
                 }`}
               ></div>
