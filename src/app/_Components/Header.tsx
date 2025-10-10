@@ -7,6 +7,13 @@ import React from "react";
 
 export default function Header() {
  const {theme,setTheme} = useTheme()
+ const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null; 
   return (
     <header className="w-full bg-gradient-to-r from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 shadow-2xl p-4">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0">

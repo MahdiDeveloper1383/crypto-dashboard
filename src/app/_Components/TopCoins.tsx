@@ -74,7 +74,7 @@ export default function TopCoins() {
 
             <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-gray-400 gap-5">
               {charts?.coins.map((chart, index) => (
-                <div className="w-full">
+                <div className="w-full" key={index}>
                   <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2 text-center">
                     {chart_coins[index].toUpperCase()}
                   </h4>

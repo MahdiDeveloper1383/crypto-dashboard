@@ -1,5 +1,6 @@
 'use client'
 
+import { formatCurrency } from '@/app/Hooks/utils/formatCurrency'
 import { MarketPoint } from '@/app/interfaces/chart'
 import {
   LineChart,
@@ -16,41 +17,37 @@ interface ChartProps {
   data: MarketPoint[]
   showMarketCap?: boolean
   showVolume?: boolean
-  showPrice?:boolean
   height?: number
+  width?:number
 }
-
-
 
 export default function Chart({
   data,
   showMarketCap = false,
   showVolume = false,
-  showPrice = false,
-  height = 400
+  height = 400,
+  width,
 }:ChartProps) {
   if (!data || data.length === 0) return <p className="text-center">No data available</p>
 
   return (
-    <div className="w-full bg-white dark:bg-neutral-900 p-4 rounded-2xl shadow-md">
-      <ResponsiveContainer width="100%" height={height}>
+    <div className='w-full bg-white  dark:bg-neutral-900 p-4 rounded-2xl shadow-md'>
+      <ResponsiveContainer width="100%" height={height} minWidth={width}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
+          <XAxis dataKey="date"  />
+         <YAxis yAxisId="left"orientation="left" tickFormatter={formatCurrency}/>
+          <Tooltip formatter={(value: number) => [`$${value.toLocaleString()}`, 'Price']} />
           <Legend />
-
-
-          {showPrice&&(<Line
-            type="monotone"
-            dataKey="price"
-            stroke="#00b894"
-            strokeWidth={2}
-            dot={false}
-            name="Price (USD)"
-          />
-          )}
+          <Line
+              type="monotone"
+              dataKey="price"
+              stroke="#00b894"
+              strokeWidth={2}
+              dot={false}
+              name="Price (USD)"
+              yAxisId='left'
+              />
 
           {showMarketCap && (
             <Line
