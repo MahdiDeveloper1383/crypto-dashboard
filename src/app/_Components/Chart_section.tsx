@@ -50,11 +50,11 @@ export default function Chart_section() {
                 <div className="flex items-center gap-6 text-gray-700">
                   <label className="flex items-center gap-2">
                     <input type="checkbox"  checked={showMarketCap} onChange={()=>setshowMarketCap(!showMarketCap)} />
-                    <span className='text-white'>Market Cap</span>
+                    <span className='text-blue-800'>Market Cap</span>
                   </label>
                   <label className="flex items-center gap-2">
                     <input type="checkbox" checked={showVolume} onChange={()=>setshowVolume(!showVolume)} />
-                    <span className='text-white'>Volume</span>
+                    <span className='text-red-500 '>Volume</span>
                   </label>
                 </div>
               </div> 
