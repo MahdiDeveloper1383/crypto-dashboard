@@ -59,7 +59,7 @@ export default function Chart_section() {
                 </div>
               </div> 
 
-              <div className="max-w-[1200px] w-full mx-auto bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
+              <div className="max-w-[1200px] w-full mx-auto  dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
                 <h3 className="text-3xl md:text-4xl font-bold text-gray-700 dark:text-gray-200 mb-5">
                   {coin[index].toUpperCase()}
                 </h3>

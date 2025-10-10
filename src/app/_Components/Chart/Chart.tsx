@@ -31,7 +31,7 @@ export default function Chart({
   if (!data || data.length === 0) return <p className="text-center">No data available</p>
 
   return (
-    <div className='w-full bg-white  dark:bg-neutral-900 p-4 rounded-2xl shadow-md'>
+    <div className='w-full   dark:bg-neutral-900 p-4 rounded-2xl shadow-md'>
       <ResponsiveContainer width="100%" height={height} minWidth={width}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
