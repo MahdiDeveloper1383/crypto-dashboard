@@ -1,4 +1,4 @@
-import { MarketPoint, ChartData } from "@/app/interfaces/chart";
+import { MarketPoint, ChartData } from "@/app/interfaces/crypto/chart";
 
 export function convertToMarketPoint(chart?: ChartData): MarketPoint[] {
   if (!chart) return [];

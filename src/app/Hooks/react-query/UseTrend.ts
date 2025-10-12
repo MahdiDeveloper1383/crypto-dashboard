@@ -1,4 +1,4 @@
-import { CryptoAPIResponse } from "@/app/interfaces/trend";
+import { CryptoAPIResponse } from "@/app/interfaces/crypto/trend";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
