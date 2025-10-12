@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
-import { INews } from '../interfaces/crypto/news'
+import { INews } from '../_Interfaces/crypto/news'
 
 export default function News_Card({ News }: { News: INews }) {
   return (

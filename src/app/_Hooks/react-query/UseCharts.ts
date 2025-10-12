@@ -1,4 +1,4 @@
-import { ChartData } from "@/app/interfaces/crypto/chart";
+import { ChartData } from "@/app/_Interfaces/crypto/chart";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 

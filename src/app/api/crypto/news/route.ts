@@ -2,7 +2,7 @@
 import path from "path";
 import fs from "fs";
 import csvParser from "csv-parser";
-import { INews } from "@/app/interfaces/crypto/news";
+import { INews } from "@/app/_Interfaces/crypto/news";
 
 export async function GET() {
     const result: INews[] = [];

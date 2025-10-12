@@ -1,4 +1,4 @@
-import { CoinMarket } from "@/app/interfaces/crypto/market";
+import { CoinMarket } from "@/app/_Interfaces/crypto/market";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 

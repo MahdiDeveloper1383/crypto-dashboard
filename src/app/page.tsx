@@ -5,7 +5,7 @@ import GlobalMarketTable from "./_Components/overviewtable";
 import TopCoins from "./_Components/TopCoins";
 import Chart_section from "./_Components/Chart_section";
 import TopTrends from "./_Components/TopTrends";
-import UseNews from "./Hooks/react-query/UseNews";
+import UseNews from "./_Hooks/react-query/UseNews";
 import News_Card from "./_Components/News_Card";
 import Footer from "./_Components/footer";
 

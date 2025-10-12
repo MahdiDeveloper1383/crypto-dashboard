@@ -1,8 +1,8 @@
 'use client'
 import React, { useState } from 'react'
-import { UseChart } from '../Hooks/react-query/UseCharts'
+import { UseChart } from '../_Hooks/react-query/UseCharts'
 import Chart from './Chart/Chart'
-import { convertToMarketPoint } from '../Hooks/utils/CovertChart'
+import { convertToMarketPoint } from '../_Hooks/utils/CovertChart'
 
 export default function Chart_section() {
   const [chartcoin, setChartcoin] = useState<string[]>(['bitcoin'])

@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import { UseTrend } from '../Hooks/react-query/UseTrend'
+import { UseTrend } from '../_Hooks/react-query/UseTrend'
 
 export default function TopTrends() {
   const [activeTab, setActiveTab] = useState<'coins' | 'nfts'>('coins')

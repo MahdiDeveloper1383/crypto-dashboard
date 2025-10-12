@@ -1,4 +1,4 @@
-import { INews } from "@/app/interfaces/crypto/news";
+import { INews } from "@/app/_Interfaces/crypto/news";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 

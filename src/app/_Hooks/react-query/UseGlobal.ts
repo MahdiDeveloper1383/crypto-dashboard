@@ -1,4 +1,4 @@
-import { GlobalApiResponse } from "@/app/interfaces/crypto/global";
+import { GlobalApiResponse } from "@/app/_Interfaces/crypto/global";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
