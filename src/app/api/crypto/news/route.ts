@@ -1,18 +1,14 @@
+'use server'
 import path from "path";
 import fs from "fs";
 import csvParser from "csv-parser";
+import { INews } from "@/app/interfaces/crypto/news";
 
-export default async function GET() {
-    const result: any = [];
+export async function GET() {
+    const result: INews[] = [];
 
     const filePath = path.join(
-        process.cwd(),
-        "public",
-        "assets",
-        "data",
-        "crypto-news",
-        "data.csv"
-    );
+        process.cwd(),'/public/assets/data/crypto-news/data.csv');
 
     return new Promise((res, rej) => {
         fs.createReadStream(filePath)
