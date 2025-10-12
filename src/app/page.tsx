@@ -7,6 +7,7 @@ import Chart_section from "./_Components/Chart_section";
 import TopTrends from "./_Components/TopTrends";
 import UseNews from "./Hooks/react-query/UseNews";
 import News_Card from "./_Components/News_Card";
+import Footer from "./_Components/footer";
 
 export default function Home() {
   const {data} = UseNews()
@@ -30,6 +31,7 @@ export default function Home() {
       </div>
     
       </div>
+      <Footer/>
     </React.Fragment>
   );
 }
