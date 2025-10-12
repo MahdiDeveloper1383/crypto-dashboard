@@ -1,7 +1,7 @@
 'use client'
 
-import { formatCurrency } from '@/app/Hooks/utils/formatCurrency'
-import { MarketPoint } from '@/app/interfaces/crypto/chart'
+import { formatCurrency } from '@/Hooks/utils/formatCurrency'
+import { MarketPoint } from '@/Interfaces/crypto/chart'
 import {
   LineChart,
   Line,
