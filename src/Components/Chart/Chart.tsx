@@ -1,6 +1,6 @@
 'use client'
 
-import { formatCurrency } from '@/Hooks/utils/formatCurrency'
+import { formatCurrency } from '@/utils/formatCurrency'
 import { MarketPoint } from '@/Interfaces/crypto/chart'
 import {
   LineChart,

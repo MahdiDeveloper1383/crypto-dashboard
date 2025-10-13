@@ -2,7 +2,7 @@
 import React from "react";
 import { UseChart } from "../Hooks/react-query/UseCharts";
 import Chart from "./Chart/Chart";
-import { convertToMarketPoint } from "../Hooks/utils/CovertChart";
+import { convertToMarketPoint } from "../utils/CovertChart";
 import { useSearchChartStore } from "@/Hooks/zustand/UseSearchChart";
 
 export default function Chart_section() {
