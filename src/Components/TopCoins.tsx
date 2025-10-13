@@ -22,7 +22,7 @@ export default function TopCoins() {
     .slice(0, 12);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 p-8">
       {error && (
         <h1 className="text-4xl text-red-500">Error fetching users.</h1>
       )}

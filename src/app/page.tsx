@@ -8,7 +8,7 @@ import Chart_section from "@/Components/Chart_section";
 import TopTrends from "@/Components/TopTrends";
 import UseNews from "@/Hooks/react-query/UseNews";
 import News_Card from "@/Components/News_Card";
-import Footer from "@/Components/footer";
+import Footer from "@/Components/Footer";
 
 export default function Home() {
   const {data} = UseNews()
@@ -22,7 +22,7 @@ export default function Home() {
       <TopTrends/>
       <div className="flex flex-col gap-12 mt-28">
         <h4 className="text-center text-6xl font-bold text-gray-600 text-shadow-2xs shadow-white">News</h4>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-4 gap-3 p-5">
         {News?.map((n)=>(
           <News_Card key={n.article_id} News={n}/>
         ))}
