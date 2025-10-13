@@ -1,9 +1,10 @@
 "use client";
+import { UseChart } from "@/Hooks/react-query/UseCharts";
+import { UseMarket } from "@/Hooks/react-query/UseMarket";
+import { convertToMarketPoint } from "@/utils/CovertChart";
 import React from "react";
-import { UseMarket } from "../Hooks/react-query/UseMarket";
-import { UseChart } from "../Hooks/react-query/UseCharts";
-import { convertToMarketPoint } from "../utils/CovertChart";
-import Chart from "./Chart/Chart";
+import Chart from "../Chart/Chart";
+
 
 export default function TopCoins() {
   const { data: coins, error, isLoading } = UseMarket();

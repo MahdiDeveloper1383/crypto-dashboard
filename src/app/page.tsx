@@ -1,14 +1,14 @@
 'use client'
 import React from "react";
 
-import Header from "@/Components/Header";
-import GlobalMarketTable from "@/Components/overviewtable";
-import TopCoins from "@/Components/TopCoins";
-import Chart_section from "@/Components/Chart_section";
-import TopTrends from "@/Components/TopTrends";
+import Header from "@/Components/layout/Header";
+import GlobalMarketTable from "@/Components/Home/overviewtable";
+import TopCoins from "@/Components/Home/TopCoins";
+import Chart_section from "@/Components/Chart/Chart_section";
+import TopTrends from "@/Components/Home/TopTrends";
 import UseNews from "@/Hooks/react-query/UseNews";
 import News_Card from "@/Components/News_Card";
-import Footer from "@/Components/Footer";
+import Footer from "@/Components/layout/Footer";
 
 export default function Home() {
   const {data} = UseNews()

@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import { UseTrend } from '../Hooks/react-query/UseTrend'
+import { UseTrend } from '@/Hooks/react-query/UseTrend'
 import { Coin, NFT } from '@/Interfaces/crypto/trend'
 
 export default function TopTrends() {

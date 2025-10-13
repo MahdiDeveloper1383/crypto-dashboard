@@ -1,5 +1,5 @@
 'use client'
-import { UseGlobal } from "../Hooks/react-query/UseGlobal";
+import { UseGlobal } from "../../Hooks/react-query/UseGlobal";
 
 export default function GlobalMarketTable() {
     const {data,error,isLoading} = UseGlobal()
