@@ -3,13 +3,13 @@ import React, { useState } from 'react'
 import { UseChart } from '../Hooks/react-query/UseCharts'
 import Chart from './Chart/Chart'
 import { convertToMarketPoint } from '../Hooks/utils/CovertChart'
+import { useSearchChartStore } from '@/Hooks/zustand/UseSearchChart'
 
 export default function Chart_section() {
-  const [chartcoin, setChartcoin] = useState<string[]>(['bitcoin'])
-  const [coin, setCoin] = useState<string[]>(chartcoin)
+
+  const {chartcoin,coin,setChartcoin,setCoin,showVolume,setShowVolume,showMarketCap,setShowMarketCap} = useSearchChartStore()
   const { data: chart, isLoading, error } = UseChart(coin)
-  const [showMarketCap,setshowMarketCap] = useState<boolean>(false)
-  const [showVolume,setshowVolume] = useState<boolean>(false)
+  
 
   return (
     <div className="mt-12 px-6 text-center">
@@ -40,7 +40,7 @@ export default function Chart_section() {
                     className="border border-gray-300 bg-white rounded-lg px-3 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-400"
                   />
                   <button
-                    onClick={() => setCoin(chartcoin)}
+                    onClick={() => setCoin([chartcoin[0]])}
                     className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-colors duration-300"
                   >
                     Save
@@ -49,11 +49,11 @@ export default function Chart_section() {
 
                 <div className="flex items-center gap-6 text-gray-700">
                   <label className="flex items-center gap-2">
-                    <input type="checkbox"  checked={showMarketCap} onChange={()=>setshowMarketCap(!showMarketCap)} />
+                    <input type="checkbox"  checked={showMarketCap} onChange={()=>setShowMarketCap(!showMarketCap)} />
                     <span className='text-blue-800'>Market Cap</span>
                   </label>
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" checked={showVolume} onChange={()=>setshowVolume(!showVolume)} />
+                    <input type="checkbox" checked={showVolume} onChange={()=>setShowVolume(!showVolume)} />
                     <span className='text-red-500 '>Volume</span>
                   </label>
                 </div>
