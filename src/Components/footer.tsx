@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+
 import React from "react";
 
 export default function Footer() {
@@ -37,10 +38,8 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a rel="noopener noreferrer" href="#">
-                  Markets
-                </a>
-              </li>
+            <Link href="/markets">Markets</Link>              
+            </li>
               <li>
                 <a rel="noopener noreferrer" href="#">
                   Coins
