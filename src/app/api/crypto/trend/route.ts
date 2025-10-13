@@ -11,7 +11,8 @@ export async function GET(){
         })
         if(!res) throw new Error('Faild to fetch from CoinGecko')
         return NextResponse.json(res.data)
-    }catch(err){
+    }catch(error:unknown){
+        console.log(error);
         return NextResponse.json({ error: "Failed to fetch market data" }, { status: 500 });
     }
 }

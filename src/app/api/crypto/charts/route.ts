@@ -33,7 +33,7 @@ export async function POST(req: Request) {
     );
 
     return NextResponse.json({ coins: results });
-  } catch (error) {
+  } catch (error:unknown) {
     console.error("Error fetching multi-coin charts:", error);
     return NextResponse.json({ error: "Failed to fetch market charts" }, { status: 500 });
   }

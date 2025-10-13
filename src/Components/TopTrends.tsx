@@ -1,13 +1,13 @@
 'use client'
 import React, { useState } from 'react'
 import { UseTrend } from '../Hooks/react-query/UseTrend'
+import { Coin, NFT } from '@/Interfaces/crypto/trend'
 
 export default function TopTrends() {
   const [activeTab, setActiveTab] = useState<'coins' | 'nfts'>('coins')
   const {data} = UseTrend()
-  const list =
-    activeTab === 'coins' ? data?.coins ?? [] :
-    activeTab === 'nfts' ? data?.nfts ?? [] : []
+const list: Coin[] | NFT[] =
+  activeTab === 'coins' ? data?.coins ?? [] : data?.nfts ?? [];
     
   return (
    <section className="mt-14 w-full flex flex-col items-center justify-center text-center mb-10 gap-8">
@@ -42,39 +42,36 @@ export default function TopTrends() {
       <div className="min-w-[1400px] min-h-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl shadow-gray-500 p-6">
   
            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {list.map((item: any) => (
+          {list.map((item) => (
             <li
-              key={activeTab === 'coins' ? item.item.id : item.id}
+              key={activeTab === 'coins' ? (item as Coin).item.id : (item as NFT).id}
               className="bg-gray-100 dark:bg-gray-800 hover:scale-105 transition-transform duration-300 rounded-2xl shadow-lg p-6 flex flex-col justify-center items-center text-gray-800 dark:text-white"
             >
               {activeTab === 'coins' ? (
                 <>
           
-                  <h3 className="text-2xl font-bold mb-1">{item.item.name}</h3>
+                  <h3 className="text-2xl font-bold mb-1">{(item as Coin).item.name}</h3>
                   <p className="text-green-500 font-semibold text-xl mb-1">
-                    ${item.item.data?.price.toFixed(4)}
+                    ${(item as Coin).item.data?.price.toFixed(4)}
                   </p>
                   <p className="text-sm opacity-80">
-                    Rank #{item.item.market_cap_rank}
+                    Rank #{(item as Coin).item.market_cap_rank}
                   </p>
                 </>
               ) : (
                 <>
       
-                  <h3 className="text-2xl font-bold mb-1">{item.name}</h3>
+                  <h3 className="text-2xl font-bold mb-1">{(item as NFT).name}</h3>
                   <p className="text-green-500 font-semibold text-xl mb-1">
-                    {item.data?.floor_price}
+                    {(item as NFT).data?.floor_price}
                   </p>
                   <p className="text-sm opacity-80">
-                    Symbol: {item.symbol.toUpperCase()}
+                    Symbol: {(item as NFT).symbol.toUpperCase()}
                   </p>
                 </>
               )}
             </li>
             ))}
-            
-          
-        
         </ul>
       </div>
     </section>

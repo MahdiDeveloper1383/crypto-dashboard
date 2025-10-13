@@ -4,23 +4,22 @@ import fs from "fs";
 import csvParser from "csv-parser";
 import { INews } from "@/Interfaces/crypto/news";
 
-export async function GET() {
+export async function GET(): Promise<Response> {
     const result: INews[] = [];
 
     const filePath = path.join(
-        process.cwd(),'/public/assets/data/crypto-news/data.csv');
+        process.cwd(), '/public/assets/data/crypto-news/data.csv'
+    );
 
-    return new Promise((res, rej) => {
+    await new Promise<void>((resolve, reject) => {
         fs.createReadStream(filePath)
             .pipe(csvParser())
             .on("data", (row) => result.push(row))
-            .on("end", () => {
-                res(
-                    new Response(JSON.stringify(result), {
-                        headers: { "Content-Type": "application/json" },
-                    })
-                );
-            })
-            .on("error", rej);
+            .on("end", () => resolve())
+            .on("error", reject);
+    });
+
+    return new Response(JSON.stringify(result), {
+        headers: { "Content-Type": "application/json" },
     });
 }

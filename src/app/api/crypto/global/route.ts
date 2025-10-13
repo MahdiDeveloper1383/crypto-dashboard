@@ -1,7 +1,7 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(){
     try {
         const URL = 'https://api.coingecko.com/api/v3/global'
         const res = await axios.get(URL, {
@@ -11,7 +11,8 @@ export async function GET() {
         })
         if (!res) throw new Error("Failed to fetch from CoinGecko");
         return NextResponse.json(res.data)
-    } catch (err) {
+    } catch (error:unknown) {
+        console.log(error);
         return NextResponse.json({ error: "Failed to fetch market data" }, { status: 500 });
     }
 }

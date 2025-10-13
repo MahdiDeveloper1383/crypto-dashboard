@@ -28,7 +28,8 @@ export async function GET(req: NextRequest) {
 
 
     return NextResponse.json(res.data);
-  } catch (err) {
+  } catch (error:unknown) {
+    console.log(error);
     return NextResponse.json({ error: "Failed to fetch market data" }, { status: 500 });
   }
 }

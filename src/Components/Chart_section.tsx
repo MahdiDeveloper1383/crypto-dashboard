@@ -1,15 +1,22 @@
-'use client'
-import React, { useState } from 'react'
-import { UseChart } from '../Hooks/react-query/UseCharts'
-import Chart from './Chart/Chart'
-import { convertToMarketPoint } from '../Hooks/utils/CovertChart'
-import { useSearchChartStore } from '@/Hooks/zustand/UseSearchChart'
+"use client";
+import React from "react";
+import { UseChart } from "../Hooks/react-query/UseCharts";
+import Chart from "./Chart/Chart";
+import { convertToMarketPoint } from "../Hooks/utils/CovertChart";
+import { useSearchChartStore } from "@/Hooks/zustand/UseSearchChart";
 
 export default function Chart_section() {
-
-  const {chartcoin,coin,setChartcoin,setCoin,showVolume,setShowVolume,showMarketCap,setShowMarketCap} = useSearchChartStore()
-  const { data: chart, isLoading, error } = UseChart(coin)
-  
+  const {
+    chartcoin,
+    coin,
+    setChartcoin,
+    setCoin,
+    showVolume,
+    setShowVolume,
+    showMarketCap,
+    setShowMarketCap,
+  } = useSearchChartStore();
+  const { data: chart, isLoading, error } = UseChart(coin);
 
   return (
     <div className="mt-12 px-6 text-center">
@@ -35,7 +42,9 @@ export default function Chart_section() {
                   <input
                     type="text"
                     value={chartcoin[0]}
-                    onChange={(e) => setChartcoin([e.target.value.toLowerCase()])}
+                    onChange={(e) =>
+                      setChartcoin([e.target.value.toLowerCase()])
+                    }
                     placeholder="Enter coin name"
                     className="border border-gray-300 bg-white rounded-lg px-3 py-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-400"
                   />
@@ -49,15 +58,23 @@ export default function Chart_section() {
 
                 <div className="flex items-center gap-6 text-gray-700">
                   <label className="flex items-center gap-2">
-                    <input type="checkbox"  checked={showMarketCap} onChange={()=>setShowMarketCap(!showMarketCap)} />
-                    <span className='text-blue-800'>Market Cap</span>
+                    <input
+                      type="checkbox"
+                      checked={showMarketCap}
+                      onChange={() => setShowMarketCap(!showMarketCap)}
+                    />
+                    <span className="text-blue-800">Market Cap</span>
                   </label>
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" checked={showVolume} onChange={()=>setShowVolume(!showVolume)} />
-                    <span className='text-red-500 '>Volume</span>
+                    <input
+                      type="checkbox"
+                      checked={showVolume}
+                      onChange={() => setShowVolume(!showVolume)}
+                    />
+                    <span className="text-red-500 ">Volume</span>
                   </label>
                 </div>
-              </div> 
+              </div>
 
               <div className="max-w-[1200px] w-full mx-auto  dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
                 <h3 className="text-3xl md:text-4xl font-bold text-gray-700 dark:text-gray-200 mb-5">
@@ -65,7 +82,7 @@ export default function Chart_section() {
                 </h3>
                 <Chart
                   data={convertToMarketPoint(coinchart)}
-                  showMarketCap = {showMarketCap}
+                  showMarketCap={showMarketCap}
                   showVolume={showVolume}
                 />
               </div>
@@ -74,5 +91,5 @@ export default function Chart_section() {
         </div>
       )}
     </div>
-  )
+  );
 }
