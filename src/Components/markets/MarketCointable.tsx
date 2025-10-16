@@ -18,6 +18,8 @@ export default function MarketCointable() {
   if (!Coins) return <div className="text-center p-10">Loading...</div>;
 
   return (
+    <React.Fragment>
+
     <div className="mt-20 w-full h-screen max-w-[1450px] mx-auto shadow-2xl rounded-2xl overflow-x-auto  dark:bg-white">
       <div className="flex flex-col sm:flex-row items-center justify-between w-full gap-4 mb-6 px-4">
         <input
@@ -41,7 +43,7 @@ export default function MarketCointable() {
             value={filter.sortType}
             onChange={(e) => {
               const value = e.target.value;
-
+              
               if (value === "") {
                 setFilter({ search: "", sortBy: "", sortType: "" });
               } else {
@@ -59,7 +61,7 @@ export default function MarketCointable() {
             className="p-2 border border-gray-300 rounded-xl focus:outline-none dark:bg-gray-900 dark:text-white dark:border-gray-700"
             value={filter.sortBy}
             onChange={(e) => setFilter({ ...filter, sortBy: e.target.value })}
-          >
+            >
             <option value="market_cap_desc">Market Cap ↓</option>
             <option value="market_cap_asc">Market Cap ↑</option>
             <option value="price_desc">Price ↓</option>
@@ -81,11 +83,13 @@ export default function MarketCointable() {
         </thead>
         <tbody>
           {currentCoins?.map((coin, index) => (
-           <CoinstableCard coin={coin} index={index} key={coin.id}/>
+            <CoinstableCard coin={coin} index={index} key={coin.id}/>
           ))}
         </tbody>
       </table>
-      <div className="flex justify-center gap-2 mt-4">
+     
+    </div>
+     <div className="flex justify-center gap-2 mt-4">
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
@@ -98,6 +102,6 @@ export default function MarketCointable() {
           </button>
         ))}
       </div>
-    </div>
+          </React.Fragment>
   );
 }

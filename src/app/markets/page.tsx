@@ -1,4 +1,5 @@
 
+import Chart_section from '@/Components/Chart/Chart_section'
 import Footer from '@/Components/layout/Footer'
 import Header from '@/Components/layout/Header'
 import MarketCointable from '@/Components/markets/MarketCointable'
@@ -11,6 +12,7 @@ export default function Markets() {
     <Header/>
     <MarketOverview/>
     <MarketCointable/>
+    <Chart_section/> 
     <Footer/>
     </React.Fragment>
   )
