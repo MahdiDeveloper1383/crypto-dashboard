@@ -1,5 +1,6 @@
 "use client";
 
+import { Menu, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,15 +9,15 @@ import React from "react";
 export default function Header() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
-
+   const [menuOpen, setMenuOpen] = React.useState(false);
   React.useEffect(() => {
     setMounted(true);
   }, []);
 
   if (!mounted) return null;
   return (
-    <header className="w-full bg-gradient-to-r from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 shadow-xl">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+    <header className="min-w-[648px] bg-gradient-to-r from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 shadow-xl">
+      <div className="w-full flex items-center justify-between px-4 md:px-6 py-4">
         <div className="flex items-center gap-3 shrink-0">
           <Image
             src="/assets/257-2574815_crypto-com-logo-svg-hd-png-download.png"
@@ -99,8 +100,25 @@ export default function Header() {
               Sign Up
             </Link>
           </div>
+           <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="lg:hidden text-gray-800 dark:text-gray-100"
+          >
+            {menuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
       </div>
+        {menuOpen && (
+        <div className="lg:hidden flex flex-col items-center gap-4 pb-6 text-gray-800 dark:text-gray-100 font-medium border-t border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900">
+          <Link href="/" onClick={() => setMenuOpen(false)}>Home</Link>
+          <Link href="/markets" onClick={() => setMenuOpen(false)}>Markets</Link>
+          <Link href="/coins" onClick={() => setMenuOpen(false)}>Coins</Link>
+          <Link href="/news" onClick={() => setMenuOpen(false)}>News</Link>
+          <Link href="/nfts" onClick={() => setMenuOpen(false)}>NFTs</Link>
+          <Link href="/contact" onClick={() => setMenuOpen(false)}>Contact Us</Link>
+          <Link href="/about" onClick={() => setMenuOpen(false)}>About Us</Link>
+        </div>
+      )}
     </header>
   );
 }

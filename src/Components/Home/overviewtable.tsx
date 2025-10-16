@@ -4,7 +4,7 @@ import { UseGlobal } from "../../Hooks/react-query/UseGlobal";
 export default function GlobalMarketTable() {
     const {data,error,isLoading} = UseGlobal()
   return (
-    <div className="flex justify-center mt-12">
+    <div className="w-[648px] sm:w-full flex justify-center mt-12">
       <div className="overflow-x-auto shadow-lg rounded-2xl border border-gray-200 bg-white w-full max-w-6xl">
         {error && <p className="text-3xl text-red-600 text-center">fetching data faild</p>}
         {isLoading && <p className="text-3xl text-yellow-300 text-center">Is Loading...</p>}
