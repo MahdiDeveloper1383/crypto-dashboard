@@ -1,6 +1,6 @@
 "use client";
-import { UseChart } from "@/Hooks/react-query/UseCharts";
-import { UseMarket } from "@/Hooks/react-query/UseMarket";
+import { UseChart } from "@/react-query/UseCharts";
+import { UseMarket } from "@/react-query/UseMarket";
 import { convertToMarketPoint } from "@/utils/CovertChart";
 import React from "react";
 import Chart from "../Chart/Chart";

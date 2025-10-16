@@ -1,58 +1,19 @@
 "use client";
-import { UseMarket } from "@/Hooks/react-query/UseMarket";
+import { useCoinFilter } from "@/Hooks/UseCoinsFilter";
+import { usePagination } from "@/Hooks/UsePagition";
+import { UseMarket } from "@/react-query/UseMarket";
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 
 export default function MarketCointable() {
   const { data: Coins } = UseMarket();
-  const [CurrentPage, serCurrentPage] = useState(1);
-  const ItemPerPage = 10;
-  const indexofLastProduct = ItemPerPage * CurrentPage;
-  const indexofFirstProduct = indexofLastProduct - ItemPerPage;
-  const [Filter, setFilter] = useState({
-    search: "",
-    sortType: "",
-    sortBy: "",
-  });
-  let filteredCoins = Coins?.filter((coin) =>
-    coin.name.toLowerCase().includes(Filter.search.toLowerCase())
-  );
-  if (Filter.sortType === "top_gainers") {
-    filteredCoins = [...(filteredCoins ?? [])].sort(
-      (a, b) =>
-        b.market_cap_change_percentage_24h - a.market_cap_change_percentage_24h
-    );
-  } else if (Filter.sortType === "top_losers") {
-    filteredCoins = [...(filteredCoins ?? [])].sort(
-      (a, b) =>
-        a.market_cap_change_percentage_24h - b.market_cap_change_percentage_24h
-    );
-  } else if (Filter.sortType === "high_volume") {
-    filteredCoins = [...(filteredCoins ?? [])].sort(
-      (a, b) => b.total_volume - a.total_volume
-    );
-  }
-  if (Filter.sortBy === "market_cap_desc") {
-    filteredCoins = [...(filteredCoins ?? [])].sort(
-      (a, b) => a.market_cap - b.market_cap
-    );
-  } else if (Filter.sortBy === "market_cap_asc") {
-    filteredCoins = [...(filteredCoins ?? [])].sort(
-      (a, b) => b.market_cap - a.market_cap
-    );
-  } else if (Filter.sortBy === "price_desc") {
-    filteredCoins = [...(filteredCoins ?? [])].sort(
-      (a, b) => a.current_price - b.current_price
-    );
-  } else if (Filter.sortBy === "price_asc") {
-    filteredCoins = [...(filteredCoins ?? [])].sort(
-      (a, b) => b.current_price - a.current_price
-    );
-  }
-  const CurrentCoins = filteredCoins?.slice(
-    indexofFirstProduct,
-    indexofLastProduct
-  );
+  const { filteredCoins, filter, setFilter } = useCoinFilter(Coins ?? []);
+  const {
+    currentItems: currentCoins,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = usePagination(filteredCoins, 10);
   if (!Coins) return <div className="text-center p-10">Loading...</div>;
 
   return (
@@ -62,13 +23,13 @@ export default function MarketCointable() {
           type="text"
           placeholder="Search for a coin..."
           className="w-full sm:w-[300px] p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-900 dark:text-white dark:border-gray-700"
-          value={Filter.search}
+          value={filter.search}
           onChange={(e) => {
             const value = e.target.value;
             if (value === "") {
               setFilter({ search: "", sortBy: "", sortType: "" });
             } else {
-              setFilter({ ...Filter, sortType: value });
+              setFilter({ ...filter, sortType: value });
             }
           }}
         />
@@ -76,8 +37,16 @@ export default function MarketCointable() {
         <div className="flex flex-wrap justify-center sm:justify-end gap-3">
           <select
             className="p-2 border border-gray-300 rounded-xl focus:outline-none dark:bg-gray-900 dark:text-white dark:border-gray-700"
-            value={Filter.sortType}
-            onChange={(e) => setFilter({ ...Filter, sortType: e.target.value })}
+            value={filter.sortType}
+            onChange={(e) => {
+              const value = e.target.value;
+
+              if (value === "") {
+                setFilter({ search: "", sortBy: "", sortType: "" });
+              } else {
+                setFilter({ ...filter, sortType: value });
+              }
+            }}
           >
             <option value="">All Coins</option>
             <option value="top_gainers">Top Gainers</option>
@@ -87,8 +56,8 @@ export default function MarketCointable() {
 
           <select
             className="p-2 border border-gray-300 rounded-xl focus:outline-none dark:bg-gray-900 dark:text-white dark:border-gray-700"
-            value={Filter.sortBy}
-            onChange={(e) => setFilter({ ...Filter, sortBy: e.target.value })}
+            value={filter.sortBy}
+            onChange={(e) => setFilter({ ...filter, sortBy: e.target.value })}
           >
             <option value="market_cap_desc">Market Cap ↓</option>
             <option value="market_cap_asc">Market Cap ↑</option>
@@ -110,7 +79,7 @@ export default function MarketCointable() {
           </tr>
         </thead>
         <tbody>
-          {CurrentCoins?.map((coin, index) => (
+          {currentCoins?.map((coin, index) => (
             <tr
               key={coin.id}
               className=" hover:bg-gray-50 transition text-xl font-normal"
@@ -146,20 +115,17 @@ export default function MarketCointable() {
         </tbody>
       </table>
       <div className="flex justify-center gap-2 mt-4">
-        {Array.from(
-          { length: Math.ceil((Coins?.length ?? 0) / ItemPerPage) },
-          (_, i) => (
-            <button
-              key={i}
-              onClick={() => serCurrentPage(i + 1)}
-              className={`px-3 py-1 rounded cursor-pointer ${
-                CurrentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
-              }`}
-            >
-              {i + 1}
-            </button>
-          )
-        )}
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrentPage(i + 1)}
+            className={`px-3 py-1 rounded cursor-pointer ${
+              currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
+            }`}
+          >
+            {i + 1}
+          </button>
+        ))}
       </div>
     </div>
   );

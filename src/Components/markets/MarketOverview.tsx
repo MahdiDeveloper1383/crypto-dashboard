@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import MarketstateCard from '../Cards/MarketstateCard'
-import { UseGlobal } from '@/Hooks/react-query/UseGlobal'
+import { UseGlobal } from '@/react-query/UseGlobal'
 
 
 export default function MarketOverview() {

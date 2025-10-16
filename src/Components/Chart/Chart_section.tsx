@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import { UseChart } from "../../Hooks/react-query/UseCharts";
+import { UseChart } from "../../react-query/UseCharts";
 import Chart from "./Chart";
 import { convertToMarketPoint } from "../../utils/CovertChart";
-import { useSearchChartStore } from "@/Hooks/zustand/UseSearchChart";
+import { useSearchChartStore } from "@/zustand/UseSearchChart";
 
 export default function Chart_section() {
   const {
