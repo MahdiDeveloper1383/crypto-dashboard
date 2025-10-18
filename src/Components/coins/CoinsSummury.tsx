@@ -4,6 +4,7 @@ import { usePagination } from "@/Hooks/UsePagition";
 import { UseMarket } from "@/react-query/UseMarket";
 import Image from "next/image";
 import React, { useState } from "react";
+import CoinsSmmryCard from "../Cards/CoinsSmmryCard";
 
 export default function CoinsSummury() {
   const [currency, setCurrency] = useState<string>("usd");
@@ -102,47 +103,7 @@ export default function CoinsSummury() {
         </thead>
         <tbody>
           {currentCoins?.map((coin, index) => (
-            <tr key={coin.id} className="text-xl cursor-pointer hover:bg-gray-200">
-              <td className="px-4 py-3 text-center">{index + 1}</td>
-              <td className="px-4 py-3 flex gap-2 text-left">
-                <Image
-                  src={coin.image}
-                  alt="coin"
-                  width={30}
-                  height={30}
-                  className="rounded-full"
-                />
-                <span className="font-semibold text-2xl">{coin.name} </span>
-                <span className="uppercase text-gray-600 text-xs">
-                  {coin.symbol}
-                </span>
-              </td>
-              <td className="px-4 py-3 text-left">
-                {symbol}
-                {coin.current_price.toFixed(2)}
-              </td>
-              <td
-                className={`px-4 py-3 ${
-                  coin.market_cap_change_percentage_24h < 0
-                    ? "text-red-600"
-                    : "text-green-400"
-                }`}
-              >
-                %{coin.market_cap_change_percentage_24h?.toFixed(2) ?? "0.0"}
-              </td>
-              <td className="px-4 py-3 text-left">
-                {symbol}
-                {coin.market_cap.toLocaleString()}
-              </td>
-              <td className="px-4 py-3 text-left">{coin.market_cap_rank}</td>
-              <td className="px-4 py-3 text-left">
-                {symbol}
-                {coin.total_volume.toLocaleString()}
-              </td>
-              <td className="px-4 py-3 text-left">
-                {coin.total_supply?.toFixed(2) ?? "—"}
-              </td>
-            </tr>
+           <CoinsSmmryCard key={coin.id} coin={coin} index={index} symbol={symbol} />
           ))}
         </tbody>
       </table>
