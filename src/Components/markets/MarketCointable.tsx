@@ -6,7 +6,7 @@ import { UseMarket } from "@/react-query/UseMarket";
 import MarketCoinstableCard from "../Cards/MarketCoinstableCard";
 
 export default function MarketCointable() {
-  const { data: Coins } = UseMarket();
+  const { data: Coins } = UseMarket('usd');
   const selectedCoin = Coins?.slice(0,20)
   const { filteredCoins, filter, setFilter } = useCoinFilter(selectedCoin ?? []);
   const {
