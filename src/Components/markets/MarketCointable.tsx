@@ -1,14 +1,14 @@
 "use client";
+import React from "react";
 import { useCoinFilter } from "@/Hooks/UseCoinsFilter";
 import { usePagination } from "@/Hooks/UsePagition";
 import { UseMarket } from "@/react-query/UseMarket";
-import Image from "next/image";
-import React from "react";
-import CoinstableCard from "../Cards/CoinstableCard";
+import MarketCoinstableCard from "../Cards/MarketCoinstableCard";
 
 export default function MarketCointable() {
   const { data: Coins } = UseMarket();
-  const { filteredCoins, filter, setFilter } = useCoinFilter(Coins ?? []);
+  const selectedCoin = Coins?.slice(0,20)
+  const { filteredCoins, filter, setFilter } = useCoinFilter(selectedCoin ?? []);
   const {
     currentItems: currentCoins,
     currentPage,
@@ -43,7 +43,6 @@ export default function MarketCointable() {
             value={filter.sortType}
             onChange={(e) => {
               const value = e.target.value;
-              
               if (value === "") {
                 setFilter({ search: "", sortBy: "", sortType: "" });
               } else {
@@ -71,7 +70,7 @@ export default function MarketCointable() {
       </div>
 
       <table className="min-w-full text-sm text-gray-700 ">
-        <thead className=" bg-gradient-to-r from-indigo-400 to-blue-600 text-white">
+        <thead className="bg-gradient-to-r from-indigo-400 to-blue-600 text-white">
           <tr>
             <th className="px-4 py-3 text-center">#</th>
             <th className="px-4 py-3 text-left">Coin</th>
@@ -83,7 +82,7 @@ export default function MarketCointable() {
         </thead>
         <tbody>
           {currentCoins?.map((coin, index) => (
-            <CoinstableCard coin={coin} index={index} key={coin.id}/>
+            <MarketCoinstableCard coin={coin} index={index} key={coin.id}/>
           ))}
         </tbody>
       </table>

@@ -2,7 +2,7 @@ import { CoinMarket } from "@/Interfaces/crypto/market";
 import Image from "next/image";
 import React from "react";
 
-export default function CoinstableCard({
+export default function MarketCoinstableCard({
   coin,
   index,
 }: {
