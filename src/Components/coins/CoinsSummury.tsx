@@ -1,5 +1,6 @@
 "use client";
 import { useCoinFilter } from "@/Hooks/UseCoinsFilter";
+import { usePagination } from "@/Hooks/UsePagition";
 import { UseMarket } from "@/react-query/UseMarket";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -8,6 +9,7 @@ export default function CoinsSummury() {
   const [currency, setCurrency] = useState<string>("usd");
   const { data: Coins } = UseMarket(currency);
   const {filter,filteredCoins,setFilter} = useCoinFilter(Coins??[])
+  const {currentItems:currentCoins,currentPage,totalPages,setCurrentPage} = usePagination(filteredCoins,10)
   const getCurrencySymbol = (cur: string) => {
     switch (cur) {
       case "usd":
@@ -26,7 +28,7 @@ export default function CoinsSummury() {
   const symbol = getCurrencySymbol(currency);
 
   return (
-    <div className="mt-14 flex flex-col items-center mr-auto ml-auto min-w-[648px] sm:w-[1300px] min-h-[800px] rounded-2xl shadow-2xl gap-8 p-6">
+    <div className="mt-14 flex flex-col items-center mr-auto ml-auto min-w-[648px] sm:w-[1450px] min-h-[800px] rounded-2xl shadow-2xl gap-8 p-6">
       <h3 className="text-6xl font-bold text-gray-700 text-shadow-md text-shadow-gray-800 mb-6 text-center">
         Summury Coins
       </h3>
@@ -99,7 +101,7 @@ export default function CoinsSummury() {
           </tr>
         </thead>
         <tbody>
-          {filteredCoins?.map((coin, index) => (
+          {currentCoins?.map((coin, index) => (
             <tr key={coin.id} className="text-xl cursor-pointer hover:bg-gray-200">
               <td className="px-4 py-3 text-center">{index + 1}</td>
               <td className="px-4 py-3 flex gap-2 text-left">
@@ -144,6 +146,19 @@ export default function CoinsSummury() {
           ))}
         </tbody>
       </table>
+      <div className="flex justify-center gap-2 mt-4">
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrentPage(i + 1)}
+            className={`px-3 py-1 rounded cursor-pointer ${
+              currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
+            }`}
+          >
+            {i + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
