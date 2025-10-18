@@ -1,4 +1,3 @@
-
 import Chart_section from '@/Components/Chart/Chart_section'
 import Footer from '@/Components/layout/Footer'
 import Header from '@/Components/layout/Header'
