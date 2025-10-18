@@ -1,10 +1,15 @@
 import { CoinMarket } from '@/Interfaces/crypto/market'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 export default function CoinsSmmryCard({coin,index,symbol}:{coin:CoinMarket,index:number,symbol:string}) {
+  const router = useRouter()
   return (
-     <tr  className="text-xl cursor-pointer hover:bg-gray-200">
+     <tr  
+     className="text-xl cursor-pointer hover:bg-gray-200"
+     onClick={()=>router.push(`/coins/${coin.id}`)}
+     >
               <td className="px-4 py-3 text-center">{index + 1}</td>
               <td className="px-4 py-3 flex gap-2 text-left">
                 <Image
