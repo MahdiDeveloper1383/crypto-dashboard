@@ -1,33 +1,17 @@
 "use client";
+import React, { useState } from "react";
 import { useCoinFilter } from "@/Hooks/UseCoinsFilter";
 import { usePagination } from "@/Hooks/UsePagition";
 import { UseMarket } from "@/react-query/UseMarket";
-import Image from "next/image";
-import React, { useState } from "react";
 import CoinsSmmryCard from "../Cards/CoinsSmmryCard";
+import { getCurrencySymbol } from "@/utils/CurrenySymbol";
 
 export default function CoinsSummury() {
   const [currency, setCurrency] = useState<string>("usd");
   const { data: Coins } = UseMarket(currency);
   const {filter,filteredCoins,setFilter} = useCoinFilter(Coins??[])
   const {currentItems:currentCoins,currentPage,totalPages,setCurrentPage} = usePagination(filteredCoins,10)
-  const getCurrencySymbol = (cur: string) => {
-    switch (cur) {
-      case "usd":
-        return "$";
-      case "eur":
-        return "€";
-      case "gbp":
-        return "£";
-      case "jpy":
-        return "¥";
-      default:
-        return "$";
-    }
-  };
-
-  const symbol = getCurrencySymbol(currency);
-
+  const symbol = getCurrencySymbol(currency)
   return (
     <div className="mt-14 flex flex-col items-center mr-auto ml-auto min-w-[648px] sm:w-[1450px] min-h-[800px] rounded-2xl shadow-2xl gap-8 p-6">
       <h3 className="text-6xl font-bold text-gray-700 text-shadow-md text-shadow-gray-800 mb-6 text-center">
