@@ -1,4 +1,5 @@
 "use client";
+import { useCoinFilter } from "@/Hooks/UseCoinsFilter";
 import { UseMarket } from "@/react-query/UseMarket";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -6,7 +7,7 @@ import React, { useState } from "react";
 export default function CoinsSummury() {
   const [currency, setCurrency] = useState<string>("usd");
   const { data: Coins } = UseMarket(currency);
-  
+  const {filter,filteredCoins,setFilter} = useCoinFilter(Coins??[])
   const getCurrencySymbol = (cur: string) => {
     switch (cur) {
       case "usd":
@@ -35,19 +36,41 @@ export default function CoinsSummury() {
           type="text"
           className="border border-gray-400 w-full sm:w-[300px] p-2 rounded-2xl bg-white text-gray-800 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Search Coin..."
+          value={filter.search}
+          onChange={(e)=>{
+            const value = e.target.value
+            if (value === '') {
+              setFilter({search:'',sortBy:'',sortType:''})
+            }else{
+              setFilter({...filter,search:value})
+            }
+          }}
         />
         <div className="flex flex-wrap justify-center sm:justify-end gap-8">
-          <select className="p-2 border border-gray-800 rounded-xl focus:outline-none dark:bg-gray-900  dark:text-white dark:border-gray-700">
-            <option value="">All</option>
-            <option value="">Top Gainers</option>
-            <option value="">All</option>
-            <option value="">All</option>
+          <select
+           className="p-2 border border-gray-800 rounded-xl focus:outline-none dark:bg-gray-900  dark:text-white dark:border-gray-700"
+           value={filter.sortType}
+           onChange={(e)=>{
+            const value = e.target.value
+            if (value === '') {
+              setFilter({sortType:'',sortBy:'',search:''})
+            }else{
+              setFilter({...filter,sortType:value})
+            }
+           }}>
+           <option value="">All Coins</option>
+            <option value="top_gainers">Top Gainers</option>
+            <option value="top_losers">Top Losers</option>
+            <option value="high_volume">High Volume</option>
           </select>
-          <select className="p-2 border border-gray-800 rounded-xl focus:outline-none dark:bg-gray-900 dark:text-white dark:border-gray-700">
-            <option value="">Market Up ↑</option>
-            <option value="">Market Down ↓</option>
-            <option value="">Price ↑</option>
-            <option value="">Price ↓</option>
+          <select 
+          className="p-2 border border-gray-800 rounded-xl focus:outline-none dark:bg-gray-900 dark:text-white dark:border-gray-700"
+          value={filter.sortBy}
+          onChange={(e)=>setFilter({...filter,sortBy:e.target.value})}>
+            <option value="market_cap_asc">Market Cap ↑</option> 
+            <option value="market_cap_desc">Market Cap ↓</option>
+            <option value="price_asc">Price ↑</option>
+            <option value="price_desc">Price ↓</option>
           </select>
           <select
             value={currency}
@@ -76,7 +99,7 @@ export default function CoinsSummury() {
           </tr>
         </thead>
         <tbody>
-          {Coins?.map((coin, index) => (
+          {filteredCoins?.map((coin, index) => (
             <tr key={coin.id} className="text-xl cursor-pointer hover:bg-gray-200">
               <td className="px-4 py-3 text-center">{index + 1}</td>
               <td className="px-4 py-3 flex gap-2 text-left">

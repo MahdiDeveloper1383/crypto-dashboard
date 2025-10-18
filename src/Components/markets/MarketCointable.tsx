@@ -32,7 +32,7 @@ export default function MarketCointable() {
             if (value === "") {
               setFilter({ search: "", sortBy: "", sortType: "" });
             } else {
-              setFilter({ ...filter, sortType: value });
+              setFilter({ ...filter, search: value });
             }
           }}
         />
@@ -61,10 +61,10 @@ export default function MarketCointable() {
             value={filter.sortBy}
             onChange={(e) => setFilter({ ...filter, sortBy: e.target.value })}
             >
-            <option value="market_cap_desc">Market Cap ↓</option>
             <option value="market_cap_asc">Market Cap ↑</option>
-            <option value="price_desc">Price ↓</option>
+            <option value="market_cap_desc">Market Cap ↓</option>
             <option value="price_asc">Price ↑</option>
+            <option value="price_desc">Price ↓</option>
           </select>
         </div>
       </div>
