@@ -1,21 +1,20 @@
 'use client'
-import { CoinMarket } from '@/Interfaces/crypto/market'
-import { UseMarket } from '@/react-query/UseMarket'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import { UseCoin } from '@/react-query/UseCoin'
 
-export default function Coin({ params }: { params: { id: string } }) {
-    const {id} = params
-    const [coin,setCoin] = useState<CoinMarket>()
-    const {data:market} = UseMarket('usd')
-    useEffect(()=>{
-      if (market) {
-        const u = market?.find(u => u.id === id)
-        setCoin(u)
-      }
-      },[market,id])
+export default function Coin({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params)
+
+  const { data, isLoading, error } = UseCoin({ coin: id, currency: 'usd' })
+
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Error loading data</div>
+
   return (
     <div>
-
+      <h2>{data?.id}</h2>
+      <p>{data?.name}</p>
+      <p>{data?.symbol}</p>
     </div>
   )
 }

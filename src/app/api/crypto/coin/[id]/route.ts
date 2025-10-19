@@ -6,7 +6,7 @@ const CG_API_KEY = "CG-3zw8oqXXv22GGR749vbqDrh4";
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     if (!id) {
       return NextResponse.json({ error: "Missing coin id" }, { status: 400 });
     }
