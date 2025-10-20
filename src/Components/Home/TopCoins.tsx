@@ -1,13 +1,13 @@
 "use client";
 import { UseChart } from "@/react-query/UseCharts";
-import { UseMarket } from "@/react-query/UseMarket";
 import { convertToMarketPoint } from "@/utils/CovertChart";
+import { UseMarket } from "@/react-query/UseMarket";
 import React from "react";
 import Chart from "../Chart/Chart";
 
 
 export default function TopCoins() {
-  const { data: coins, error, isLoading } = UseMarket();
+  const { data: coins, error, isLoading } = UseMarket('usd');
   const chart_coins = ["bitcoin", "ethereum", "solana"];
 
   const { data: charts } = UseChart(chart_coins);
@@ -91,7 +91,6 @@ export default function TopCoins() {
           </div>
         </>
       )}
-      <div></div>
     </div>
   );
 }
