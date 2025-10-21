@@ -16,7 +16,8 @@ export default function Coin({ params }: { params: Promise<{ id: string }> }) {
   const { data: coin, isLoading, error } = UseCoin({ coin: id });
   const chart_coin = coin?.id ? [coin.id] : [];
   const { data: chart } = UseChart(chart_coin, { enabled: !!coin?.id });
-  const {setShowMarketCap,showMarketCap,setShowVolume,showVolume,} = useSearchChartStore()
+  const { setShowMarketCap, showMarketCap, setShowVolume, showVolume } =
+    useSearchChartStore();
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading data</div>;
 
@@ -293,14 +294,19 @@ export default function Coin({ params }: { params: Promise<{ id: string }> }) {
                       type="checkbox"
                       className="w-4 h-4 accent-blue-500"
                       checked={showMarketCap}
-                      onChange={()=>setShowMarketCap(!showMarketCap)}
+                      onChange={() => setShowMarketCap(!showMarketCap)}
                     />
                     <span className="text-blue-800 dark:text-blue-400 font-medium">
                       Market Cap
                     </span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <input checked={showVolume} onChange={()=>setShowVolume(!showVolume)} type="checkbox" className="w-4 h-4 accent-red-500" />
+                    <input
+                      checked={showVolume}
+                      onChange={() => setShowVolume(!showVolume)}
+                      type="checkbox"
+                      className="w-4 h-4 accent-red-500"
+                    />
                     <span className="text-red-500 dark:text-red-400 font-medium">
                       Volume
                     </span>
@@ -311,10 +317,16 @@ export default function Coin({ params }: { params: Promise<{ id: string }> }) {
                   <Chart
                     data={convertToMarketPoint(chart?.coins[0])}
                     showMarketCap={showMarketCap}
-                    showVolume = {showVolume}
+                    showVolume={showVolume}
                   />
                 </div>
               </div>
+            </div>
+            <div className="w-full bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 flex flex-col gap-6 transition-transform hover:scale-[1.02] duration-300">
+              <h4 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 text-center border-b border-gray-200 dark:border-gray-700 pb-3">
+                Coin Description
+              </h4>
+              <p className="text-xl">{coin?.description.en || ""}</p>
             </div>
           </div>
         </div>
