@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { UseCoin } from "@/react-query/UseCoin";
 import Header from "@/Components/layout/Header";
 import Footer from "@/Components/layout/Footer";
@@ -9,15 +9,16 @@ import { UseChart } from "@/react-query/UseCharts";
 import Chart from "@/Components/Chart/Chart";
 import { convertToMarketPoint } from "@/utils/CovertChart";
 import { useSearchChartStore } from "@/zustand/UseSearchChart";
+import { getCurrencySymbol } from "@/utils/CurrenySymbol";
 
 export default function Coin({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
-
   const { data: coin, isLoading, error } = UseCoin({ coin: id });
   const chart_coin = coin?.id ? [coin.id] : [];
   const { data: chart } = UseChart(chart_coin, { enabled: !!coin?.id });
-  const { setShowMarketCap, showMarketCap, setShowVolume, showVolume } =
-    useSearchChartStore();
+  const { setShowMarketCap, showMarketCap, setShowVolume, showVolume } = useSearchChartStore();
+  const [currency,setCurrency] = useState<string>('usd')
+  const symbol = getCurrencySymbol(currency)
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading data</div>;
 
@@ -94,7 +95,7 @@ export default function Coin({ params }: { params: Promise<{ id: string }> }) {
               </button>
             </div>
             <div className="flex justify-end mb-4">
-              <select className="p-2 px-4 border rounded-full">
+              <select className="p-2 px-4 border rounded-full" value={currency} onChange={(e)=>setCurrency(e.target.value)}>
                 <option value="usd">USD</option>
                 <option value="eur">EUR</option>
                 <option value="gbp">GBP</option>
@@ -236,21 +237,19 @@ export default function Coin({ params }: { params: Promise<{ id: string }> }) {
                       #{coin?.market_data.market_cap_rank.toLocaleString()}
                     </td>
                     <td className="px-4 py-3 text-center text-gray-900 dark:text-gray-100">
-                      ${coin?.market_data.current_price.usd?.toLocaleString()}
+                      {symbol}{coin?.market_data.current_price[currency]?.toLocaleString()}
                     </td>
                     <td className="px-4 py-3 text-center text-gray-900 dark:text-gray-100">
-                      ${coin?.market_data.market_cap.usd?.toLocaleString()}
+                      {symbol}{coin?.market_data.market_cap[currency]?.toLocaleString()}
                     </td>
                     <td className="px-4 py-3 text-center text-gray-900 dark:text-gray-100">
-                      ${coin?.market_data.total_volume.usd?.toLocaleString()}
+                      {symbol}{coin?.market_data.total_volume[currency]?.toLocaleString()}
                     </td>
                     <td className="px-4 py-3 text-center text-gray-900 dark:text-gray-100">
-                      %
-                      {coin?.market_data.price_change_percentage_24h.toFixed(2)}
+                      %{coin?.market_data.price_change_percentage_24h.toFixed(2)}
                     </td>
                     <td className="px-4 py-3 text-center text-gray-900 dark:text-gray-100">
-                      $
-                      {coin?.market_data.fully_diluted_valuation.usd.toLocaleString()}
+                      {symbol}{coin?.market_data.fully_diluted_valuation[currency].toLocaleString()}
                     </td>
                   </tr>
                 </tbody>
@@ -261,7 +260,7 @@ export default function Coin({ params }: { params: Promise<{ id: string }> }) {
                     24h High
                   </span>
                   <span className="text-green-500 font-medium">
-                    ${coin?.market_data.high_24h.usd?.toLocaleString()}
+                    {symbol}{coin?.market_data.high_24h[currency]?.toLocaleString()}
                   </span>
                 </div>
                 <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-xl flex flex-col items-center justify-center">
@@ -269,7 +268,7 @@ export default function Coin({ params }: { params: Promise<{ id: string }> }) {
                     24h Low
                   </span>
                   <span className="text-red-500 font-medium">
-                    ${coin?.market_data.low_24h.usd?.toLocaleString()}
+                    {symbol}{coin?.market_data.low_24h[currency]?.toLocaleString()}
                   </span>
                 </div>
                 <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-xl flex flex-col items-center justify-center">
@@ -277,7 +276,7 @@ export default function Coin({ params }: { params: Promise<{ id: string }> }) {
                     All Time High
                   </span>
                   <span className="text-gray-400 font-medium">
-                    ${coin?.market_data.ath.usd?.toLocaleString()}
+                    {symbol}{coin?.market_data.ath[currency]?.toLocaleString()}
                   </span>
                 </div>
               </div>
