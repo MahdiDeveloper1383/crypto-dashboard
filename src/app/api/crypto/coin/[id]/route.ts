@@ -18,7 +18,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       return NextResponse.json({ error: "Invalid currency" }, { status: 400 });
     }
 
-    const cgUrl = `https://api.coingecko.com/api/v3/coins/${encodeURIComponent(id)}?localization=false&tickers=true&market_data=true&community_data=false&developer_data=false&sparkline=true&vs_currency=${currency}`;
+    const cgUrl = `https://api.coingecko.com/api/v3/coins/${encodeURIComponent(id)}?localization=false&tickers=true&market_data=true&community_data=false&developer_data=false&sparkline=true`;
 
     const res = await axios.get(cgUrl, {
       headers: { "x-cg-demo-api-key": CG_API_KEY },
