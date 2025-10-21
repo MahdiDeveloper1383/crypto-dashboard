@@ -328,6 +328,14 @@ export default function Coin({ params }: { params: Promise<{ id: string }> }) {
               </h4>
               <p className="text-xl">{coin?.description.en || ""}</p>
             </div>
+            <div className="w-full flex justify-end gap-4 mt-6">
+              <button className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors duration-200">
+                Buy
+              </button>
+              <button className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl transition-colors duration-200">
+                Sell
+              </button>
+            </div>
           </div>
         </div>
       </div>
