@@ -2,7 +2,7 @@ import { ChartData } from "@/Interfaces/crypto/chart";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export function UseChart(coins:string[]){
+export function UseChart(coins: string[], options?: { enabled: boolean; }){
     return useQuery<{coins:ChartData[]}>({
         queryKey:['charts',coins],
         queryFn: async()=>{

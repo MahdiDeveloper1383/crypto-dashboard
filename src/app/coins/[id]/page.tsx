@@ -5,12 +5,18 @@ import Header from "@/Components/layout/Header";
 import Footer from "@/Components/layout/Footer";
 import Image from "next/image";
 import Link from "next/link";
+import { UseChart } from "@/react-query/UseCharts";
+import Chart from "@/Components/Chart/Chart";
+import { convertToMarketPoint } from "@/utils/CovertChart";
+import { useSearchChartStore } from "@/zustand/UseSearchChart";
 
 export default function Coin({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
 
   const { data: coin, isLoading, error } = UseCoin({ coin: id });
-
+  const chart_coin = coin?.id ? [coin.id] : [];
+  const { data: chart } = UseChart(chart_coin, { enabled: !!coin?.id });
+  const {setShowMarketCap,showMarketCap,setShowVolume,showVolume,} = useSearchChartStore()
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading data</div>;
 
@@ -272,6 +278,41 @@ export default function Coin({ params }: { params: Promise<{ id: string }> }) {
                   <span className="text-gray-400 font-medium">
                     ${coin?.market_data.ath.usd?.toLocaleString()}
                   </span>
+                </div>
+              </div>
+            </div>
+            <div className="w-full bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 flex flex-col gap-6 transition-transform hover:scale-[1.02] duration-300">
+              <h4 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 text-center border-b border-gray-200 dark:border-gray-700 pb-3">
+                Coin Chart
+              </h4>
+
+              <div className="flex flex-col gap-4 mt-4">
+                <div className="flex flex-wrap items-center gap-6 text-gray-700 dark:text-gray-300">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 accent-blue-500"
+                      checked={showMarketCap}
+                      onChange={()=>setShowMarketCap(!showMarketCap)}
+                    />
+                    <span className="text-blue-800 dark:text-blue-400 font-medium">
+                      Market Cap
+                    </span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input checked={showVolume} onChange={()=>setShowVolume(!showVolume)} type="checkbox" className="w-4 h-4 accent-red-500" />
+                    <span className="text-red-500 dark:text-red-400 font-medium">
+                      Volume
+                    </span>
+                  </label>
+                </div>
+
+                <div className="w-full mt-4">
+                  <Chart
+                    data={convertToMarketPoint(chart?.coins[0])}
+                    showMarketCap={showMarketCap}
+                    showVolume = {showVolume}
+                  />
                 </div>
               </div>
             </div>

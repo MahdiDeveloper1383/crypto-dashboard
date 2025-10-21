@@ -2,7 +2,7 @@ import { ICoin } from "@/Interfaces/crypto/coin";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export function UseCoin({ coin}: { coin: string;}) {
+export function UseCoin({ coin}: { coin: string ,options?: { enabled?: boolean }}) {
   return useQuery<ICoin>({
     queryKey: ['coin', coin],
     queryFn: async () => {
