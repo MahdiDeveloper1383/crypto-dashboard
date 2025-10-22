@@ -4,6 +4,7 @@ import { useCoinFilter } from "@/Hooks/UseCoinsFilter";
 import { usePagination } from "@/Hooks/UsePagition";
 import { UseMarket } from "@/react-query/UseMarket";
 import MarketCoinstableCard from "../Cards/MarketCoinstableCard";
+import Pagination from "../layout/Pagination";
 
 export default function MarketCointable() {
   const { data: Coins, isLoading, error } = UseMarket("usd");
@@ -94,19 +95,11 @@ export default function MarketCointable() {
           </table>
         )}
       </div>
-      <div className="flex justify-center gap-2 mt-4">
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrentPage(i + 1)}
-            className={`px-3 py-1 rounded cursor-pointer ${
-              currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
-            }`}
-          >
-            {i + 1}
-          </button>
-        ))}
-      </div>
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPages={totalPages}
+      />
     </React.Fragment>
   );
 }

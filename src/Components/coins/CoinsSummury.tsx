@@ -5,6 +5,7 @@ import { usePagination } from "@/Hooks/UsePagition";
 import { UseMarket } from "@/react-query/UseMarket";
 import CoinsSmmryCard from "../Cards/CoinsSmmryCard";
 import { getCurrencySymbol } from "@/utils/CurrenySymbol";
+import Pagination from "../layout/Pagination";
 
 export default function CoinsSummury() {
   const [currency, setCurrency] = useState<string>("usd");
@@ -108,21 +109,11 @@ export default function CoinsSummury() {
               ))}
             </tbody>
           </table>
-          <div className="flex justify-center gap-2 mt-4">
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrentPage(i + 1)}
-                className={`px-3 py-1 rounded cursor-pointer ${
-                  currentPage === i + 1
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200"
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={totalPages}
+          />
         </React.Fragment>
       )}
     </div>

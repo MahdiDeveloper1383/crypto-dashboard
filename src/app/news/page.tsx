@@ -2,6 +2,7 @@
 import News_Card from "@/Components/Cards/News_Card";
 import Footer from "@/Components/layout/Footer";
 import Header from "@/Components/layout/Header";
+import Pagination from "@/Components/layout/Pagination";
 import { usePagination } from "@/Hooks/UsePagition";
 import UseNews from "@/react-query/UseNews";
 import React, { useState } from "react";
@@ -9,18 +10,22 @@ import React, { useState } from "react";
 export default function News() {
   const { data: News } = UseNews();
   const TopNews = News?.slice(0, 4);
-  const [filter,setfilter] = useState({
-    search:'',
-    keywords:''
-  })
-  const filteredNews = News?.filter((n)=>n.title.toLowerCase().includes(filter.search.toLowerCase())&&
-  (n.keywords.includes(filter.keywords.toLocaleLowerCase()))) ?? []
+  const [filter, setfilter] = useState({
+    search: "",
+    keywords: "",
+  });
+  const filteredNews =
+    News?.filter(
+      (n) =>
+        n.title.toLowerCase().includes(filter.search.toLowerCase()) &&
+        n.keywords.includes(filter.keywords.toLocaleLowerCase())
+    ) ?? [];
   const {
-      currentItems: currentNews,
-      currentPage,
-      setCurrentPage,
-      totalPages,
-    } = usePagination(filteredNews, 8);
+    currentItems: currentNews,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = usePagination(filteredNews, 8);
   return (
     <React.Fragment>
       <Header />
@@ -42,7 +47,11 @@ export default function News() {
         </h4>
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
-          <select value={filter.keywords} onChange={(e)=>setfilter({...filter,keywords:e.target.value})} className="p-2 px-4 border rounded-full w-full sm:w-auto">
+          <select
+            value={filter.keywords}
+            onChange={(e) => setfilter({ ...filter, keywords: e.target.value })}
+            className="p-2 px-4 border rounded-full w-full sm:w-auto"
+          >
             <option value="all">All</option>
             <option value="crypto">Crypto</option>
             <option value="market">Market</option>
@@ -55,7 +64,7 @@ export default function News() {
             placeholder="Search news..."
             className="p-2 px-4 border rounded-full w-full sm:w-64"
             value={filter.search}
-            onChange={(e)=>setfilter({...filter,search:e.target.value})}
+            onChange={(e) => setfilter({ ...filter, search: e.target.value })}
           />
         </div>
         <div className="flex-1 ">
@@ -65,19 +74,11 @@ export default function News() {
             ))}
           </div>
         </div>
-        <div className="flex justify-center gap-2 mt-4">
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrentPage(i + 1)}
-            className={`px-3 py-1 rounded cursor-pointer ${
-              currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
-            }`}
-          >
-            {i + 1}
-          </button>
-        ))}
-      </div>
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+        />
       </div>
 
       <Footer />
