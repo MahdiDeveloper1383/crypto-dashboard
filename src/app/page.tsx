@@ -9,6 +9,7 @@ import TopTrends from "@/Components/Home/TopTrends";
 import UseNews from "@/react-query/UseNews";
 import News_Card from "@/Components/Cards/News_Card";
 import Footer from "@/Components/layout/Footer";
+import Link from "next/link";
 
 export default function Home() {
   const {data} = UseNews()
@@ -20,15 +21,15 @@ export default function Home() {
       <TopCoins/>
       <Chart_section/>
       <TopTrends/>
-      <div className="flex flex-col gap-12 mt-28">
+      <div className="flex flex-col gap-8 mt-28">
         <h4 className="text-center text-6xl font-bold text-gray-600 text-shadow-2xs shadow-white">News</h4>
       <div className="grid grid-cols-4 gap-3 p-5">
         {News?.map((n)=>(
           <News_Card key={n.article_id} News={n}/>
         ))}
-        <a className="text-4xl cursor-pointer font-serif text-gray-700">
+        <Link href={'/news'} className="text-4xl cursor-pointer font-serif text-gray-700">
         Cilck for more News...
-      </a>
+      </Link>
       </div>
     
       </div>

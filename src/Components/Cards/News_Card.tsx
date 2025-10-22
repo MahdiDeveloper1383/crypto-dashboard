@@ -1,16 +1,17 @@
 import Image from 'next/image'
 import React from 'react'
 import { INews } from '@/Interfaces/crypto/news'
+import Link from 'next/link'
 
 export default function News_Card({ News }: { News: INews }) {
   return (
     <div className="
       flex flex-col items-center justify-start 
-      w-full sm:w-[320px] min-h-[520px] 
+      w-full sm:w-full min-h-[520px] 
       bg-white dark:bg-gray-900 
       rounded-2xl shadow-xl hover:shadow-2xl 
       hover:scale-[1.02] transition-all duration-300 
-      overflow-hidden cursor-pointer
+      overflow-hidden
     ">
       <div className="w-full h-[200px] relative">
         <Image
@@ -30,12 +31,13 @@ export default function News_Card({ News }: { News: INews }) {
         </p>
 
         <div className="mt-auto pt-4">
-          <a
+          <Link
+          href={`/news/${News.article_id}`}
             target="_blank"
             className="inline-block text-green-600 dark:text-green-400 font-semibold hover:underline"
           >
             Read more →
-          </a>
+          </Link>
         </div>
       </div>
     </div>
