@@ -2,6 +2,7 @@
 import News_Card from "@/Components/Cards/News_Card";
 import Footer from "@/Components/layout/Footer";
 import Header from "@/Components/layout/Header";
+import { usePagination } from "@/Hooks/UsePagition";
 import UseNews from "@/react-query/UseNews";
 import React, { useState } from "react";
 
@@ -13,7 +14,13 @@ export default function News() {
     keywords:''
   })
   const filteredNews = News?.filter((n)=>n.title.toLowerCase().includes(filter.search.toLowerCase())&&
-  (n.keywords.includes(filter.keywords.toLocaleLowerCase())))
+  (n.keywords.includes(filter.keywords.toLocaleLowerCase()))) ?? []
+  const {
+      currentItems: currentNews,
+      currentPage,
+      setCurrentPage,
+      totalPages,
+    } = usePagination(filteredNews, 8);
   return (
     <React.Fragment>
       <Header />
@@ -29,7 +36,7 @@ export default function News() {
         </div>
       </div>
 
-      <div className="min-w-[320px] sm:min-w-[648px] w-full h-screen mx-auto flex flex-col mt-8 rounded-2xl shadow-md p-5 bg-white dark:bg-gray-900">
+      <div className="mb-32 min-w-[320px] sm:min-w-[648px] w-full min-h-[500px] mx-auto flex flex-col mt-8 rounded-2xl shadow-md p-5 bg-white dark:bg-gray-900">
         <h4 className="text-4xl sm:text-6xl font-bold text-center text-gray-900 dark:text-white mb-6">
           News
         </h4>
@@ -51,13 +58,26 @@ export default function News() {
             onChange={(e)=>setfilter({...filter,search:e.target.value})}
           />
         </div>
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 ">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredNews?.map((n) => (
+            {currentNews?.map((n) => (
               <News_Card News={n} key={n.article_id} />
             ))}
           </div>
         </div>
+        <div className="flex justify-center gap-2 mt-4">
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrentPage(i + 1)}
+            className={`px-3 py-1 rounded cursor-pointer ${
+              currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
+            }`}
+          >
+            {i + 1}
+          </button>
+        ))}
+      </div>
       </div>
 
       <Footer />
