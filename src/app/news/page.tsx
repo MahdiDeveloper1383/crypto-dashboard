@@ -49,7 +49,15 @@ export default function News() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
           <select
             value={filter.keywords}
-            onChange={(e) => setfilter({ ...filter, keywords: e.target.value })}
+            onChange={(e) => {
+              const value = e.target.value
+              if (value === 'all') {
+                setfilter({...filter,keywords:'',search:''})
+              }
+              else{
+                setfilter({ ...filter, keywords: e.target.value })
+              }
+            }}
             className="p-2 px-4 border rounded-full w-full sm:w-auto"
           >
             <option value="all">All</option>
