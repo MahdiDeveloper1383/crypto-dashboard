@@ -33,22 +33,18 @@ export default function Footer() {
             </h3>
             <ul className="space-y-1">
               <li>
-                <a rel="noopener noreferrer" href="#">
-                  Home
-                </a>
+               <Link href='/'>
+                Home
+                </Link>
               </li>
               <li>
-            <Link href="/markets">Markets</Link>              
-            </li>
-              <li>
-                <a rel="noopener noreferrer" href="#">
-                  Coins
-                </a>
+                <Link href="/markets">Markets</Link>
               </li>
               <li>
-                <a rel="noopener noreferrer" href="#">
-                  News
-                </a>
+                <Link href="/coins">Coins</Link>
+              </li>
+              <li>
+                <Link href="/news">News</Link>
               </li>
               <li>
                 <a rel="noopener noreferrer" href="#">
