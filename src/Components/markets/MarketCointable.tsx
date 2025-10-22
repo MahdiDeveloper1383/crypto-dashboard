@@ -1,17 +1,27 @@
 "use client";
-import React from "react";
-import { useCoinFilter } from "@/Hooks/UseCoinsFilter";
+import React, { useEffect } from "react";
 import { usePagination } from "@/Hooks/UsePagition";
 import { UseMarket } from "@/react-query/UseMarket";
 import MarketCoinstableCard from "../Cards/MarketCoinstableCard";
 import Pagination from "../layout/Pagination";
+import { useCoinFilterStore } from "@/zustand/UseCoinFilterStore";
 
 export default function MarketCointable() {
   const { data: Coins, isLoading, error } = UseMarket("usd");
-  const selectedCoin = Coins?.slice(0, 20);
-  const { filteredCoins, filter, setFilter } = useCoinFilter(
-    selectedCoin ?? []
-  );
+  const {
+    filteredCoins,
+    setCoins,
+    search,
+    sortBy,
+    sortType,
+    setSearch,
+    setSortBy,
+    setSortType
+  } = useCoinFilterStore();
+
+  useEffect(() => {
+    if (Coins) setCoins(Coins.slice(0, 20));
+  }, [Coins, setCoins]);
   const {
     currentItems: currentCoins,
     currentPage,
@@ -27,29 +37,15 @@ export default function MarketCointable() {
             type="text"
             placeholder="Search for a coin..."
             className="w-full sm:w-[300px] p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-900 dark:text-white dark:border-gray-700"
-            value={filter.search}
-            onChange={(e) => {
-              const value = e.target.value;
-              if (value === "") {
-                setFilter({ search: "", sortBy: "", sortType: "" });
-              } else {
-                setFilter({ ...filter, search: value });
-              }
-            }}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
 
           <div className="flex flex-wrap justify-center sm:justify-end gap-3">
             <select
               className="p-2 border border-gray-300 rounded-xl focus:outline-none dark:bg-gray-900 dark:text-white dark:border-gray-700"
-              value={filter.sortType}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (value === "") {
-                  setFilter({ search: "", sortBy: "", sortType: "" });
-                } else {
-                  setFilter({ ...filter, sortType: value });
-                }
-              }}
+              value={sortType}
+              onChange={(e) => setSortType(e.target.value)}
             >
               <option value="">All Coins</option>
               <option value="top_gainers">Top Gainers</option>
@@ -59,8 +55,8 @@ export default function MarketCointable() {
 
             <select
               className="p-2 border border-gray-300 rounded-xl focus:outline-none dark:bg-gray-900 dark:text-white dark:border-gray-700"
-              value={filter.sortBy}
-              onChange={(e) => setFilter({ ...filter, sortBy: e.target.value })}
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
             >
               <option value="market_cap_asc">Market Cap ↑</option>
               <option value="market_cap_desc">Market Cap ↓</option>

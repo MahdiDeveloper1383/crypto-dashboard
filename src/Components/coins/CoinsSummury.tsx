@@ -1,16 +1,25 @@
 "use client";
-import React, { useState } from "react";
-import { useCoinFilter } from "@/Hooks/UseCoinsFilter";
+import React, { useEffect, useState } from "react";
 import { usePagination } from "@/Hooks/UsePagition";
 import { UseMarket } from "@/react-query/UseMarket";
 import CoinsSmmryCard from "../Cards/CoinsSmmryCard";
 import { getCurrencySymbol } from "@/utils/CurrenySymbol";
 import Pagination from "../layout/Pagination";
+import { useCoinFilterStore } from "@/zustand/UseCoinFilterStore";
 
 export default function CoinsSummury() {
   const [currency, setCurrency] = useState<string>("usd");
   const { data: Coins, isLoading, error } = UseMarket(currency);
-  const { filter, filteredCoins, setFilter } = useCoinFilter(Coins ?? []);
+  const {
+    filteredCoins,
+    setCoins,
+    search,
+    sortBy,
+    sortType,
+    setSearch,
+    setSortBy,
+    setSortType,
+  } = useCoinFilterStore();
   const {
     currentItems: currentCoins,
     currentPage,
@@ -18,6 +27,9 @@ export default function CoinsSummury() {
     setCurrentPage,
   } = usePagination(filteredCoins, 10);
   const symbol = getCurrencySymbol(currency);
+  useEffect(() => {
+    if (Coins) setCoins(Coins);
+  }, [Coins, setCoins]);
   return (
     <div className="mt-14 flex flex-col items-center mr-auto ml-auto min-w-[648px] sm:w-[1450px] min-h-[800px] rounded-2xl shadow-2xl gap-8 p-6">
       <h3 className="text-6xl font-bold text-gray-700 text-shadow-md text-shadow-gray-800 mb-6 text-center">
@@ -32,28 +44,14 @@ export default function CoinsSummury() {
               type="text"
               className="border border-gray-400 w-full sm:w-[300px] p-2 rounded-2xl bg-white text-gray-800 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Search Coin..."
-              value={filter.search}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (value === "") {
-                  setFilter({ search: "", sortBy: "", sortType: "" });
-                } else {
-                  setFilter({ ...filter, search: value });
-                }
-              }}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
             <div className="flex flex-wrap justify-center sm:justify-end gap-8">
               <select
                 className="p-2 border border-gray-800 rounded-xl focus:outline-none dark:bg-gray-900  dark:text-white dark:border-gray-700"
-                value={filter.sortType}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (value === "") {
-                    setFilter({ sortType: "", sortBy: "", search: "" });
-                  } else {
-                    setFilter({ ...filter, sortType: value });
-                  }
-                }}
+                value={sortType}
+                onChange={(e) => setSortType(e.target.value)}
               >
                 <option value="">All Coins</option>
                 <option value="top_gainers">Top Gainers</option>
@@ -62,10 +60,8 @@ export default function CoinsSummury() {
               </select>
               <select
                 className="p-2 border border-gray-800 rounded-xl focus:outline-none dark:bg-gray-900 dark:text-white dark:border-gray-700"
-                value={filter.sortBy}
-                onChange={(e) =>
-                  setFilter({ ...filter, sortBy: e.target.value })
-                }
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
               >
                 <option value="market_cap_asc">Market Cap ↑</option>
                 <option value="market_cap_desc">Market Cap ↓</option>
