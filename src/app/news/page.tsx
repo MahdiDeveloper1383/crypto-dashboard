@@ -3,11 +3,17 @@ import News_Card from "@/Components/Cards/News_Card";
 import Footer from "@/Components/layout/Footer";
 import Header from "@/Components/layout/Header";
 import UseNews from "@/react-query/UseNews";
-import React from "react";
+import React, { useState } from "react";
 
 export default function News() {
   const { data: News } = UseNews();
   const TopNews = News?.slice(0, 4);
+  const [filter,setfilter] = useState({
+    search:'',
+    keywords:''
+  })
+  const filteredNews = News?.filter((n)=>n.title.toLowerCase().includes(filter.search.toLowerCase())&&
+  (n.keywords.includes(filter.keywords.toLocaleLowerCase())))
   return (
     <React.Fragment>
       <Header />
@@ -29,22 +35,25 @@ export default function News() {
         </h4>
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
-          <select className="p-2 px-4 border rounded-full w-full sm:w-auto">
+          <select value={filter.keywords} onChange={(e)=>setfilter({...filter,keywords:e.target.value})} className="p-2 px-4 border rounded-full w-full sm:w-auto">
             <option value="all">All</option>
             <option value="crypto">Crypto</option>
             <option value="market">Market</option>
-            <option value="technology">Technology</option>
+            <option value="bitcoin">Bitcoin</option>
+            <option value="ethereum">Ethereum</option>
           </select>
 
           <input
             type="text"
             placeholder="Search news..."
             className="p-2 px-4 border rounded-full w-full sm:w-64"
+            value={filter.search}
+            onChange={(e)=>setfilter({...filter,search:e.target.value})}
           />
         </div>
         <div className="flex-1 overflow-y-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {News?.map((n) => (
+            {filteredNews?.map((n) => (
               <News_Card News={n} key={n.article_id} />
             ))}
           </div>
