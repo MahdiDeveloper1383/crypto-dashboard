@@ -4,10 +4,12 @@ import Header from "@/Components/layout/Header";
 import Pagination from "@/Components/layout/Pagination";
 import { usePagination } from "@/Hooks/UsePagition";
 import UseNftList from "@/react-query/UseNftList";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function NFTS() {
   const { data=[] } = UseNftList();
+  const router = useRouter()
   const {currentItems:Nfts,currentPage,setCurrentPage,totalPages} = usePagination(data,10)
   return (
     <React.Fragment>
@@ -25,7 +27,7 @@ export default function NFTS() {
           </thead>
           <tbody>
             {Nfts?.map((nft, index) => (
-              <tr key={nft.id} className="text-xl cursor-pointer hover:bg-gray-200">
+              <tr onClick={()=>router.push(`nfts/${nft.id}`)}  key={nft.id} className="text-xl cursor-pointer hover:bg-gray-200">
                 <td className="px-4 py-3 text-center">{index + 1}</td>
                 <td className="px-4 py-3 text-left">{nft.name}</td>
                 <td className="px-4 py-3 text-left">{nft.contract_address}</td>
