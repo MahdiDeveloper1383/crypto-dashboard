@@ -1,9 +1,9 @@
-import { NftList } from "@/Interfaces/crypto/NftList";
+import { INftList } from "@/Interfaces/crypto/NftList";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export function UseNftList(){
-    return useQuery<NftList[]>({
+export default function UseNftList(){
+    return useQuery<INftList[]>({
         queryKey:['ntfs'],
         queryFn:async()=>{
             const response = await axios.get('http://localhost:3000/api/crypto/nfts')

@@ -1,4 +1,4 @@
-export interface NftList{
+export interface INftList{
     id:string
     contract_address:string
     name:string
