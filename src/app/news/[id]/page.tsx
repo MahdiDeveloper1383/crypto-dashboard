@@ -2,7 +2,7 @@
 import Footer from '@/Components/layout/Footer'
 import Header from '@/Components/layout/Header'
 import { INews } from '@/Interfaces/crypto/news'
-import UseNews from '@/react-query/UseNews'
+import { UseNews } from '@/react-query/UseNews'
 import React, { useEffect, useState } from 'react'
 
 export default function News_details({params}:{params:Promise<{id:string}>}) {

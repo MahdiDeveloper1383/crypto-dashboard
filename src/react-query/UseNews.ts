@@ -2,7 +2,7 @@ import { INews } from "@/Interfaces/crypto/news";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export default function UseNews(){
+export function UseNews(){
     return useQuery<INews[]>({
         queryKey:['news'],
         queryFn: async()=>{
