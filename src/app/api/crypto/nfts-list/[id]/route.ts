@@ -3,9 +3,12 @@ import axios from "axios";
 
 const API_KEY = "CG-3zw8oqXXv22GGR749vbqDrh4";
 
-export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
-    const { id } = await context.params
+    const { id } = params;
     if (!id) {
       return NextResponse.json({ error: "Missing NFT id in path" }, { status: 400 });
     }
@@ -20,7 +23,9 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
       headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120" },
     });
   } catch (err: unknown) {
-    console.error("NFT fetch error:", err);
-    return NextResponse.json({ error: "Failed to fetch NFT" }, { status: 500 });
+    let message = "Failed to fetch NFT";
+    if (err instanceof Error) message = err.message;
+    console.error("NFT fetch error:", message);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
