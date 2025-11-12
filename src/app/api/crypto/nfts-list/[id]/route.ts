@@ -19,8 +19,8 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     return NextResponse.json(data, {
       headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120" },
     });
-  } catch (err: any) {
-    console.error("NFT fetch error:", err.message);
+  } catch (err: unknown) {
+    console.error("NFT fetch error:", err);
     return NextResponse.json({ error: "Failed to fetch NFT" }, { status: 500 });
   }
 }
