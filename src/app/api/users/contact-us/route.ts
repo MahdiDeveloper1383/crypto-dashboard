@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer";
 
-export async function POST(req: { json: () => PromiseLike<{ firstname: string; lastname:string; email: string; message: string; }> | {firstname:string; lastname: string; email: string; message: string; }; }) {
+export async function POST(req: { json: () => PromiseLike<{ firstname: string; lastname:string; gmail: string; message: string; }> | {firstname:string; lastname: string; gmail: string; message: string; }; }) {
   try {
-    const {firstname,lastname, email, message } = await req.json();
+    const {firstname,lastname, gmail, message } = await req.json();
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -13,7 +13,7 @@ export async function POST(req: { json: () => PromiseLike<{ firstname: string; l
     });
 
     const mailOptions = {
-      from: email,
+      from: gmail,
       to: process.env.MAIL_USER,
       subject: `A New meessage from ${firstname + lastname}`,
       text: message,

@@ -1,8 +1,29 @@
+'use client'
 import Footer from '@/Components/layout/Footer'
 import Header from '@/Components/layout/Header'
-import React from 'react'
+import React, { useState } from 'react'
 
 export default function Contact_US() {
+  const [message,setmessage] = useState({
+    firstname:'',
+    lastname:'',
+    gmail:'',
+    message:''
+  })
+  const handeles=async(e: { preventDefault: () => void })=>{
+    e.preventDefault()
+   const res = await fetch("/api/users/contact-us", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(message),
+});
+
+
+   
+  };
+  
   return (
    <React.Fragment>
     <Header/>
@@ -34,31 +55,31 @@ export default function Contact_US() {
     </div>
 
     <div className="right w-full md:w-2/3 bg-white md:ml-8 shadow-xl p-8">
-      <form action="">
+      <form onSubmit={handeles}>
         <div className="flex flex-col md:flex-row md:justify-between md:gap-16">
           <div className="flex flex-col w-full md:w-1/2">
             <label htmlFor="firstname" className="text-xl text-cyan-300 font-bold">
               First Name:
             </label>
-            <input type="text" className="border-2 p-1 pr-9 bg-gray-100" />
+            <input type="text" value={message.firstname} onChange={(e)=>setmessage({...message, firstname:e.target.value})} className="border-2 p-1 pr-9 bg-gray-100" />
           </div>
           <div className="flex flex-col w-full md:w-1/2 mt-4 md:mt-0">
             <label htmlFor="lastname" className="text-xl text-cyan-300 font-bold">
               Last Name:
             </label>
-            <input type="text" className="border-2 p-1 pr-9 bg-gray-100" />
+            <input type="text" value={message.lastname} onChange={(e)=>setmessage({...message, lastname:e.target.value})}  className="border-2 p-1 pr-9 bg-gray-100" />
           </div>
         </div>
 
         <div className="flex flex-col mt-6">
-          <label htmlFor="email" className="text-xl text-cyan-300 font-bold">
+          <label htmlFor="email"  className="text-xl text-cyan-300 font-bold">
             Email
           </label>
-          <input type="email" className="border-2 p-2 pr-9 bg-gray-100" />
+          <input type="email" value={message.gmail} onChange={(e)=>setmessage({...message, gmail:e.target.value})}  className="border-2 p-2 pr-9 bg-gray-100" />
           <label htmlFor="message" className="mb-3 mt-4 text-xl text-cyan-300 font-bold">
             Your message:
           </label>
-          <textarea rows={6} className="border-2 p-1 pr-9 bg-gray-100"></textarea>
+          <textarea rows={6} className="border-2 p-1 pr-9 bg-gray-100" value={message.message} onChange={(e)=>setmessage({...message, message:e.target.value})} ></textarea>
         </div>
 
         <div className="flex flex-col md:flex-row justify-between w-full px-3 mt-3">
@@ -81,3 +102,4 @@ export default function Contact_US() {
    </React.Fragment>
   )
 }
+
