@@ -52,9 +52,9 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a rel="noopener noreferrer" href="#">
+                <Link href='/contact'>
                   Contact Us
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
