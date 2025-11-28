@@ -47,9 +47,6 @@ export default function Header() {
           <Link href="/news" className="hover:text-blue-500 transition-colors">
             News
           </Link>
-          <Link href="/nfts" className="hover:text-blue-500 transition-colors">
-            NFTs
-          </Link>
           <Link
             href="/contact"
             className="hover:text-blue-500 transition-colors"

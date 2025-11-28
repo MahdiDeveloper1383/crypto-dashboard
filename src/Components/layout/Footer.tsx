@@ -47,9 +47,6 @@ export default function Footer() {
                 <Link href="/news">News</Link>
               </li>
               <li>
-                <Link href="/nfts">NTFs</Link>
-              </li>
-              <li>
                 <a rel="noopener noreferrer" href="#">
                   About Us
                 </a>
