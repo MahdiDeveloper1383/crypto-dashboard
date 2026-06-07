@@ -15,7 +15,7 @@ export async function POST(req: { json: () => PromiseLike<{ firstname: string; l
     const mailOptions = {
       from: gmail,
       to: process.env.MAIL_USER,
-      subject: `A New meessage from ${firstname + lastname}`,
+      subject: `A New meessage from ${firstname + " "+ lastname}`,
       text: message,
     };
 
