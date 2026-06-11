@@ -6,7 +6,7 @@ export default function page() {
       <h2 className="text-6xl font-mono text-shadow-xs text-shadow-black ">
         Login
       </h2>
-      <form className="flex flex-col w-full max-w-[450px] gap-10">
+      <form className="flex flex-col w-full max-w-[450px] gap-8">
         <input
           type="text"
           placeholder="Enter Username or Email"
@@ -22,7 +22,12 @@ export default function page() {
           value={"Login"}
           className="bg-blue-400 p-4 cursor-pointer rounded-2xl shadow-2xs shadow-gray-500 hover:shadow-xl transition text-2xl font-sans"
         />
-        <button className="flex items-center justify-center gap-3 w-full max-w-md bg-white border border-gray-300 rounded-xl px-6 py-4 text-gray-700 font-medium text-lg shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-200">
+       
+      </form>
+      <span className="text-4xl font-bold">
+        OR
+      </span>
+       <button className="flex items-center cursor-pointer justify-center gap-3 w-full max-w-md bg-white border border-gray-300 rounded-xl px-6 py-4 text-gray-700 font-medium text-lg shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-200">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 48 48"
@@ -48,7 +53,6 @@ export default function page() {
 
           <span>Continue with Google</span>
         </button>
-      </form>
     </React.Fragment>
   );
 }
