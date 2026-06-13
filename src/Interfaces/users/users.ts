@@ -11,4 +11,5 @@ export interface IUsers{
     walletAddress:string;
     role:'user'|'admin'
     createdAt:string
+    watchlist:Array<string>
 }
