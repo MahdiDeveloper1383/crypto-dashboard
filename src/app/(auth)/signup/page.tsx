@@ -21,10 +21,10 @@ export default function page() {
     lastname:yup.string().required('lastname is required'),
     username:yup.string().min(3,"Username's character is must be more than 2").max(12,"Username's character is must be less than 13").required('username is required'),
     email:yup.string().email('Invalid email').required('Email is requierd'),
-    password:yup.string().min(8,'Password must be at least 8 characters').matches(/[a-z]/,'Password must have a lowercase letter').matches(/[A-Z]/,'Password must have an uppercase letter').matches(/[0-9]/,'Password must have a number').matches(/[!@#$%^&*]/,'Password must have a special character').required(),
-    repassword:yup.string().oneOf([yup.ref('password')]).required()
+    password:yup.string().min(8,'Password must be at least 8 characters').matches(/[a-z]/,'Password must have a lowercase letter').matches(/[A-Z]/,'Password must have an uppercase letter').matches(/[0-9]/,'Password must have a number').matches(/[!@#$%^&*]/,'Password must have a special character').required('Password is required.'),
+    repassword:yup.string().oneOf([yup.ref('password')],'Password must match.').required('Please confirm your password')
   })
-  const {register,handleSubmit} = useForm({resolver:yupResolver(schema)})
+  const {register,handleSubmit,formState:{errors}} = useForm({resolver:yupResolver(schema)})
   async function onsubmit(data:Signupform){
     if (isloading) return;
     try{
@@ -51,40 +51,46 @@ export default function page() {
       <form onSubmit={handleSubmit(onsubmit)} className='flex flex-col w-full max-w-[450px] gap-8'>
          <input
           type="text"
-          {...register('firstname',{required:true})}
+          {...register('firstname')}
           placeholder="First Name:Dani"
           className=" w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-800 placeholder:text-gray-400 shadow-sm outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20"
         />
+        {errors.firstname && <span className='text-xl text-red-500'>{errors.firstname.message}</span>}
          <input
           type="text"
-         {...register('lastname',{required:true})}
+         {...register('lastname')}
           placeholder="Last name:Soprano"
           className=" w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-800 placeholder:text-gray-400 shadow-sm outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20"
         />
+        {errors.lastname && <span className='text-xl text-red-500'>{errors.lastname.message}</span>}
         <input
           type="text"
-          {...register('username',{required:true})}
+          {...register('username')}
           placeholder="Username:Dani21"
           className=" w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-800 placeholder:text-gray-400 shadow-sm outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20"
         />
+        {errors.username && <span className='text-xl text-red-500'>{errors.username.message}</span>}
         <input
           type="email"
-          {...register('email',{required:true})}
+          {...register('email')}
           placeholder="Email:example@email.com"
           className=" w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-800 placeholder:text-gray-400 shadow-sm outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20"
         />
+        {errors.email && <span className='text-xl text-red-500'>{errors.email.message}</span>}
         <input
           type="password"
-          {...register('password',{required:true})}
+          {...register('password')}
           placeholder="Password:123456789Aa@"
           className=" w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-800 placeholder:text-gray-400 shadow-sm outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20"
         />
+        {errors.password && <span className='text-xl text-red-500'>{errors.password.message}</span>}
         <input
           type="password"
-          {...register('repassword',{required:true})}
+          {...register('repassword')}
           placeholder="Comfrim Password"
           className=" w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-800 placeholder:text-gray-400 shadow-sm outline-none transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20"
         />
+        {errors.repassword && <span className='text-xl text-red-500'>{errors.repassword.message}</span>}
         <input
           type="submit"
           disabled={isloading}

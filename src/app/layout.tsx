@@ -4,7 +4,6 @@ import "./globals.css";
 import ThemeWrapper from "./ThemeWrapper";
 import Providers from "./provider";
 import { AuthProvider } from "@/Context/AuthContext";
-import { getCurrentUser } from "@/lib/auth";
 
 
 const geistSans = Geist({
