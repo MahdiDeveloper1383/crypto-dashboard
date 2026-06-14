@@ -1,6 +1,5 @@
 'use client'
 import React from "react";
-
 import Header from "@/Components/layout/Header";
 import GlobalMarketTable from "@/Components/Home/overviewtable";
 import TopCoins from "@/Components/Home/TopCoins";
