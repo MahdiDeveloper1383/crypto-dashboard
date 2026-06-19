@@ -7,13 +7,22 @@ import Link from "next/link";
 import React from "react";
 
 export default function Header() {
-  const {user} = useUser()
+  const {user,setUser} = useUser()
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
    const [menuOpen, setMenuOpen] = React.useState(false);
   React.useEffect(() => {
     setMounted(true);
   }, []);
+  async function logout() {
+    const res = await fetch('/api/users/logout',{
+      method:'POST'
+    })
+    if (res.ok) {
+      setUser(null)
+      window.location.reload()
+    }
+  }
 
   if (!mounted) return null;
   return (
@@ -83,27 +92,56 @@ export default function Header() {
               {theme === "dark" ? "Dark Mode" : "Light Mode"}
             </span>
           </label>
-          {user ?(
-            <div>
-              {user.username}
-            </div>
-          ) :(
+       {user ? (
+  <div className="flex items-center gap-3 rounded-2xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-2 shadow-lg">
+    {/* Avatar */}
+    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-lg font-bold text-white">
+      {user.username.charAt(0).toUpperCase()}
+    </div>
 
-            <div className="flex border border-gray-300 rounded-xl overflow-hidden shadow-md">
-            <Link
-              href="/login"
-              className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
-              >
-              Login
-            </Link>
-            <Link
-              href="/signup"
-              className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium border-l border-gray-300"
-              >
-              Sign Up
-            </Link>
-          </div>
-            )}
+    {/* User Info */}
+    <div className="flex flex-col">
+      <span className="text-sm text-gray-500 dark:text-gray-400">
+        Welcome
+      </span>
+      <span className="font-semibold text-gray-900 dark:text-white">
+        {user.username}
+      </span>
+    </div>
+
+    {/* Buttons */}
+    <div className="ml-3 flex gap-2">
+      <Link
+        href="/dashboard"
+        className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+      >
+        Dashboard
+      </Link>
+
+      <button
+      onClick={logout}
+        className="rounded-lg bg-red-500 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-600"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+) : (
+  <div className="flex border border-gray-300 rounded-xl overflow-hidden shadow-md">
+    <Link
+      href="/login"
+      className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
+    >
+      Login
+    </Link>
+    <Link
+      href="/signup"
+      className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium border-l border-gray-300"
+    >
+      Sign Up
+    </Link>
+  </div>
+)}
            <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="lg:hidden text-gray-800 dark:text-gray-100"

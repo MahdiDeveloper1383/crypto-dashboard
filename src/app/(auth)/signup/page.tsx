@@ -41,7 +41,6 @@ export default function page() {
     const result = await res.json()
     if (res.ok) {
       setUser(result.user)
-
       router.push('/')
     }
   }finally{
