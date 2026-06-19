@@ -1,5 +1,5 @@
 "use client";
-
+import { useUser } from "@/Hooks/UseUser";
 import { Menu, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
@@ -7,6 +7,7 @@ import Link from "next/link";
 import React from "react";
 
 export default function Header() {
+  const {user} = useUser()
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
    const [menuOpen, setMenuOpen] = React.useState(false);
@@ -82,21 +83,27 @@ export default function Header() {
               {theme === "dark" ? "Dark Mode" : "Light Mode"}
             </span>
           </label>
+          {user ?(
+            <div>
+              {user.username}
+            </div>
+          ) :(
 
-          <div className="flex border border-gray-300 rounded-xl overflow-hidden shadow-md">
+            <div className="flex border border-gray-300 rounded-xl overflow-hidden shadow-md">
             <Link
               href="/login"
               className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
-            >
+              >
               Login
             </Link>
             <Link
               href="/signup"
               className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium border-l border-gray-300"
-            >
+              >
               Sign Up
             </Link>
           </div>
+            )}
            <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="lg:hidden text-gray-800 dark:text-gray-100"

@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/navigation';
+import { useUser } from '@/Hooks/UseUser';
 type Signupform={
   firstname:string,
   lastname:string,
@@ -14,6 +15,7 @@ type Signupform={
   repassword:string
 }
 export default function page() {
+  const {setUser} = useUser()
   const router = useRouter()
   const [isloading,setIsloading] = useState(false)
   const schema = yup.object({
@@ -36,7 +38,10 @@ export default function page() {
       },
       body:JSON.stringify(data)
     })
+    const result = await res.json()
     if (res.ok) {
+      setUser(result.user)
+
       router.push('/')
     }
   }finally{
