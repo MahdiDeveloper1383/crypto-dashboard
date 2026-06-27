@@ -39,7 +39,7 @@ const list: Coin[] | NFT[] =
       </div>
 
 
-      <div className="min-w-[1400px] min-h-[700px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl shadow-gray-500 p-6">
+      <div className="min-w-[1400px] min-h-[700px]  dark:bg-gray-900 bg-white rounded-2xl shadow-2xl shadow-gray-500 p-6">
   
            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {list.map((item) => (

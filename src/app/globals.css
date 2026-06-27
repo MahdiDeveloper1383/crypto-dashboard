@@ -17,7 +17,7 @@
   --foreground: #171717;
 }
 
-.dark {
+html.dark {
   --background: #1F2937;
   --foreground: #ededed;
 }
