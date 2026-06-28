@@ -27,7 +27,7 @@ export default function Home() {
           <News_Card key={n.article_id} News={n}/>
         ))}
         <Link href={'/news'} className="text-4xl cursor-pointer font-serif text-gray-700">
-        Cilck for more News...
+        Cilck for more News.....
       </Link>
       </div>
     
