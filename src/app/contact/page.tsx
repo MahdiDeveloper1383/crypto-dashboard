@@ -53,7 +53,7 @@ export default function Contact_US() {
             </div>
           </div>
 
-          <div className="right w-full md:w-2/3 bg-white md:ml-8 shadow-xl p-8">
+          <div className="right w-full md:w-2/3  md:ml-8 shadow-xl p-8">
             <form onSubmit={handeles}>
               <div className="flex flex-col md:flex-row md:justify-between md:gap-16">
                 <div className="flex flex-col w-full md:w-1/2">
