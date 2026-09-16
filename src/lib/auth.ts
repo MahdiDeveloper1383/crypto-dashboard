@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { verifyToken } from "./jwt";
 import axios from "axios";
-import { IUsers } from "@/Interfaces/users/users";
+import { IUser } from "@/Interfaces/users/users";
 import { JwtPayload } from "jsonwebtoken";
 
 type MyToken = JwtPayload & {
@@ -25,7 +25,7 @@ export async function getCurrentUser() {
     );
 
     const user = users.find(
-      (u: IUsers) => u.id === payload.id
+      (u: IUser) => u.id === payload.id
     );
 
     return user;
