@@ -1,4 +1,4 @@
-import { IUsers } from "@/Interfaces/users/users";
+import { IUser } from "@/Interfaces/users/users";
 import { generateToken } from "@/lib/jwt";
 import axios from "axios";
 import bcrypt from "bcryptjs";
@@ -7,12 +7,12 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const { identifier, password } = await req.json();
 
-  const { data: users } = await axios.get<IUsers[]>(
+  const { data: users } = await axios.get<IUser[]>(
     `${process.env.NEXT_PUBLIC_API_URL}/users`,
   );
 
-  const user: IUsers | undefined = users.find(
-    (u: IUsers) =>
+  const user: IUser| undefined = users.find(
+    (u: IUser) =>
       u.email.toLocaleLowerCase().trim() ===
         identifier.toLocaleLowerCase().trim() ||
       u.username.toLocaleLowerCase().trim() ===

@@ -28,18 +28,20 @@ export default function Header() {
   return (
     <header className="min-w-[648px] bg-gradient-to-r from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 shadow-xl">
       <div className="w-full flex items-center justify-between px-4 md:px-6 py-4">
-        <div className="flex items-center gap-3 shrink-0">
+        <Link href={'/'} className=" cursor-pointer">
+        <div className="flex items-center gap-3 shrink-0" >
           <Image
             src="/assets/257-2574815_crypto-com-logo-svg-hd-png-download.png"
             alt="Crypto Land Logo"
             width={45}
             height={45}
             className="rounded-full object-cover"
-          />
+            />
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white whitespace-nowrap">
             Crypto Land
           </h1>
         </div>
+            </Link>
 
         <nav className="hidden lg:flex items-center justify-center gap-8 text-gray-800 dark:text-gray-100 font-medium whitespace-nowrap">
           <Link href="/" className="hover:text-blue-500 transition-colors">

@@ -1,4 +1,4 @@
-import { IUsers } from "@/Interfaces/users/users";
+import { IUser } from "@/Interfaces/users/users";
 import { generateToken } from "@/lib/jwt";
 import axios from "axios";
 import { NextResponse } from "next/server";
@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   );
 
   const existinguser = users.find(
-    (u: IUsers) =>
+    (u: IUser) =>
       u.username.toLocaleLowerCase().trim() ===
         username.toLocaleLowerCase().trim() ||
       u.email.toLocaleLowerCase().trim() === email.toLocaleLowerCase().trim(),
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
       { status: 400 },
     );
   }
-  const { data: newuser } = await axios.post<IUsers>(
+  const { data: newuser } = await axios.post<IUser>(
     `${process.env.NEXT_PUBLIC_API_URL}/users`,
     {
       username,
@@ -34,8 +34,7 @@ export async function POST(req: Request) {
       watchlist: [],
       usdBalance: 1000,
       walletAddress: crypto.randomUUID(),
-      btcBalance: 0,
-      ethBalance: 0,
+      balances:[],
       createdAt: new Date().toISOString(),
     },
   );

@@ -1,15 +1,30 @@
-export interface IUsers{
+export interface IUser{
     id:string;
-    firsname:string;
+
+    firstname:string;
+
     lastname:string;
-    email:string;
+
     username:string;
+
+    email:string;
+
     password:string;
-    usdBalance:number;
-    btcBalance:number;
-    ethBalance:number;
+
+    role:"user"|"admin";
+
+    createdAt:string;
+
     walletAddress:string;
-    role:'user'|'admin'
-    createdAt:string
-    watchlist:Array<string>
+
+    usdBalance:number;
+
+    balances:{
+        symbol:string;
+        amount:number;
+    }[];
+
+    watchlist:string[];
+
+
 }
