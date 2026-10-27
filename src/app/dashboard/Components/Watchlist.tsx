@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useUser } from "@/Hooks/UseUser";
@@ -29,25 +28,18 @@ export default function Watchlist() {
 
     if (!query) return watchlist;
 
-    return watchlist.filter((coin) =>
-      coin.toLowerCase().includes(query)
-    );
+    return watchlist.filter((coin) => coin.toLowerCase().includes(query));
   }, [watchlist, search]);
 
-  const totalPages = Math.ceil(
-    filteredWatchlist.length / ITEMS_PER_PAGE
-  );
+  const totalPages = Math.ceil(filteredWatchlist.length / ITEMS_PER_PAGE);
 
-  const safePage = Math.min(
-    currentPage,
-    Math.max(totalPages, 1)
-  );
+  const safePage = Math.min(currentPage, Math.max(totalPages, 1));
 
   const startIndex = (safePage - 1) * ITEMS_PER_PAGE;
 
   const currentCoins = filteredWatchlist.slice(
     startIndex,
-    startIndex + ITEMS_PER_PAGE
+    startIndex + ITEMS_PER_PAGE,
   );
 
   // Reset to page 1 when the search changes
@@ -56,41 +48,36 @@ export default function Watchlist() {
   }, [search]);
 
   // Delete a coin from the user's watchlist
- 
-async function handleRemoveCoin(coinId: string) {
-  setError("");
-  setDeletingCoin(coinId);
 
-  try {
-    const response = await fetch("/api/users/watchlist", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ coinId }),
-    });
+  async function handleRemoveCoin(coinId: string) {
+    setError("");
+    setDeletingCoin(coinId);
 
-    const result = await response.json();
+    try {
+      const response = await fetch("/api/users/watchlist", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ coinId }),
+      });
 
-    if (!response.ok) {
-      throw new Error(
-        result.message ?? "Failed to remove coin from watchlist."
-      );
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          result.message ?? "Failed to remove coin from watchlist.",
+        );
+      }
+
+      // Update the UI only after the API confirms success
+      setWatchlist(result.watchlist);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setDeletingCoin(null);
     }
-
-    // Update the UI only after the API confirms success
-    setWatchlist(result.watchlist);
-  } catch (err) {
-    setError(
-      err instanceof Error
-        ? err.message
-        : "Something went wrong."
-    );
-  } finally {
-    setDeletingCoin(null);
   }
-}
-
 
   return (
     <div className="space-y-8">
@@ -137,10 +124,7 @@ async function handleRemoveCoin(coinId: string) {
         </div>
 
         {error && (
-          <p
-            role="alert"
-            className="px-6 pt-4 text-sm text-red-500"
-          >
+          <p role="alert" className="px-6 pt-4 text-sm text-red-500">
             {error}
           </p>
         )}
@@ -202,10 +186,7 @@ async function handleRemoveCoin(coinId: string) {
                             onClick={() => handleRemoveCoin(coin)}
                             className="rounded-lg bg-red-50 p-2.5 text-red-500 transition hover:bg-red-100 active:scale-90 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-900/30 dark:hover:bg-red-900/50"
                           >
-                            <Heart
-                              size={18}
-                              className="fill-red-500"
-                            />
+                            <Heart size={18} className="fill-red-500" />
                           </button>
                         </div>
                       </td>
@@ -218,8 +199,7 @@ async function handleRemoveCoin(coinId: string) {
             {/* Pagination */}
             <div className="flex flex-col gap-3 border-t border-gray-200 px-6 py-4 sm:flex-row sm:items-center sm:justify-between dark:border-gray-800">
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Showing {startIndex + 1}–
-                {startIndex + currentCoins.length} of{" "}
+                Showing {startIndex + 1}–{startIndex + currentCoins.length} of{" "}
                 {filteredWatchlist.length}
               </p>
 
@@ -227,9 +207,7 @@ async function handleRemoveCoin(coinId: string) {
                 <button
                   type="button"
                   disabled={safePage <= 1}
-                  onClick={() =>
-                    setCurrentPage((page) => page - 1)
-                  }
+                  onClick={() => setCurrentPage((page) => page - 1)}
                   className="flex items-center gap-1 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
                 >
                   <ChevronLeft size={16} />
@@ -243,9 +221,7 @@ async function handleRemoveCoin(coinId: string) {
                 <button
                   type="button"
                   disabled={safePage >= totalPages}
-                  onClick={() =>
-                    setCurrentPage((page) => page + 1)
-                  }
+                  onClick={() => setCurrentPage((page) => page + 1)}
                   className="flex items-center gap-1 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
                 >
                   Next
