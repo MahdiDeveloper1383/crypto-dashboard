@@ -1,9 +1,7 @@
 import { useUser } from "@/Hooks/UseUser";
 import {
   ArrowDownLeft,
-  ArrowDownRight,
-  ArrowUp,
-  ArrowUpRight,
+  ArrowUpRight
 } from "lucide-react";
 import React from "react";
 
@@ -29,7 +27,7 @@ export default function Wallet() {
 
           <h3 className="mt-2 text-3xl font-bold tracking-tight text-blue-600 sm:text-4xl">
             $
-            {Number(user?.usdBalance ?? 0).toLocaleString("en-US", {
+            {Number(user?.usdBalance).toLocaleString("en-US", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
@@ -55,6 +53,18 @@ export default function Wallet() {
             <ArrowDownLeft size={18} />
             Deposit
           </button>
+        </div>
+      </div>
+      <div className="rounded-2xl border border-gray-300 p-6 sm:p-8">
+        <h2 className="text-2xl font-bold text-gray-800 sm:text-3xl">My Assets</h2>
+        <div className="grid grid-cols-1">
+          {user?.balances.map((b)=>(
+            <div className="flex justify-between">
+              <div>
+                <h4>{b.symbol}</h4>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

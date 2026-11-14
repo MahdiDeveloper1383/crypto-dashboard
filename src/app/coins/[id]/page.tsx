@@ -16,41 +16,81 @@ import { useRouter } from "next/navigation";
 
 export default function Coin({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
-  const router = useRouter()
+  const router = useRouter();
   const { data: coin, isLoading, error } = UseCoin({ coin: id });
-  const {user} = useUser()
-const [isWatchlisted, setIsWatchlisted] = useState(false);
+  const { user } = useUser();
+  const [isWatchlisted, setIsWatchlisted] = useState(false);
+  const [isBuyModalOpen, setIsBuyModalOpen] = useState(false);
+  const [buyAmount, setBuyAmount] = useState("");
+  const coinPrice = coin?.market_data.current_price.usd ?? 0;
 
-React.useEffect(() => {
-  if (user && coin) {
-    setIsWatchlisted(
-      user.watchlist?.includes(coin.id) ?? false
-    );
-  }
-}, [user, coin]);  const chart_coin = coin?.id ? [coin.id] : [];
+  const amount = Number(buyAmount);
+
+  const receivedCoin = coinPrice > 0 && amount > 0 ? amount / coinPrice : 0;
+  React.useEffect(() => {
+    if (user && coin) {
+      setIsWatchlisted(user.watchlist?.includes(coin.id) ?? false);
+    }
+  }, [user, coin]);
+  const chart_coin = coin?.id ? [coin.id] : [];
   const { data: chart } = UseChart(chart_coin, { enabled: !!coin?.id });
-  const { setShowMarketCap, showMarketCap, setShowVolume, showVolume } = useSearchChartStore();
-  const [currency,setCurrency] = useState<string>('usd')
-  const symbol = getCurrencySymbol(currency)
+  const { setShowMarketCap, showMarketCap, setShowVolume, showVolume } =
+    useSearchChartStore();
+  const [currency, setCurrency] = useState<string>("usd");
+  const symbol = getCurrencySymbol(currency);
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading data</div>;
- async function Addcoinwatchlist(coin:ICoin | undefined){
-   if (!coin) return;
-   if (!user) {
-    router.push('/login')
-    return
-   }
-   const response = await fetch('/api/users/watchlist',{
-    method:'POST',
-    headers:{"Content-Type": "application/json"},
-    body:JSON.stringify({coinId:coin.id})
-   })
+  async function Addcoinwatchlist(coin: ICoin | undefined) {
+    if (!coin) return;
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+    const response = await fetch("/api/users/watchlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ coinId: coin.id }),
+    });
     if (!response.ok) {
-    console.error("Failed to add coin to watchlist");
-    return;
+      console.error("Failed to add coin to watchlist");
+      return;
+    }
+    setIsWatchlisted((prev) => !prev);
   }
-setIsWatchlisted((prev) => !prev);
+ 
+async function handleBuy() {
+  try {
+    const response = await fetch("/api/users/wallet/buy", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        coinId: coin?.id,
+        usdAmount: Number(buyAmount),
+      }),
+    });
+
+    const data = await response.json();
+
+    console.log("Status:", response.status);
+    console.log("API Response:", data);
+
+    if (!response.ok) {
+      throw new Error(data.message || "Purchase failed");
+    }
+
+    console.log("Purchase successful:", data);
+
+    setIsBuyModalOpen(false);
+    setBuyAmount("");
+
+  } catch (error) {
+    console.error("Purchase error:", error);
   }
+}
+
+
   return (
     <React.Fragment>
       <Header />
@@ -98,16 +138,14 @@ setIsWatchlisted((prev) => !prev);
         <div className="w-full p-5 bg-gradient-to-r from-gray-500 to-gray-600 rounded-2xl">
           <div className="flex justify-between items-center">
             <div className="flex justify-start mb-4">
-     <button
-  type="button"
-  onClick={() => Addcoinwatchlist(coin)}
-  disabled={!user}
-  aria-label={
-    isWatchlisted
-      ? "Remove from watchlist"
-      : "Add to watchlist"
-  }
-  className="
+              <button
+                type="button"
+                onClick={() => Addcoinwatchlist(coin)}
+                disabled={!user}
+                aria-label={
+                  isWatchlisted ? "Remove from watchlist" : "Add to watchlist"
+                }
+                className="
     group
     relative
     flex
@@ -123,12 +161,12 @@ setIsWatchlisted((prev) => !prev);
     active:scale-90
     disabled:cursor-not-allowed
   "
->
-  <svg
-    width="30"
-    height="30"
-    viewBox="0 0 640 640"
-    className={`
+              >
+                <svg
+                  width="30"
+                  height="30"
+                  viewBox="0 0 640 640"
+                  className={`
       transition-all
       duration-300
       ease-out
@@ -139,19 +177,23 @@ setIsWatchlisted((prev) => !prev);
       }
       ${user ? "group-hover:scale-110" : ""}
     `}
-  >
-    <path
-      stroke="currentColor"
-      strokeWidth="45"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M442.9 144C415.6 144 389.9 157.1 373.9 179.2L339.5 226.8C335 233 327.8 236.7 320.1 236.7C312.4 236.7 305.2 233 300.7 226.8L266.3 179.2C250.3 157.1 224.6 144 197.3 144C150.3 144 112.2 182.1 112.2 229.1C112.2 279 144.2 327.5 180.3 371.4C221.4 421.4 271.7 465.4 306.2 491.7C309.4 494.1 314.1 495.9 320.2 495.9C326.3 495.9 331 494.1 334.2 491.7C368.7 465.4 419 421.3 460.1 371.4C496.3 327.5 528.2 279 528.2 229.1C528.2 182.1 490.1 144 443.1 144z"
-    />
-  </svg>
-</button>
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeWidth="45"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M442.9 144C415.6 144 389.9 157.1 373.9 179.2L339.5 226.8C335 233 327.8 236.7 320.1 236.7C312.4 236.7 305.2 233 300.7 226.8L266.3 179.2C250.3 157.1 224.6 144 197.3 144C150.3 144 112.2 182.1 112.2 229.1C112.2 279 144.2 327.5 180.3 371.4C221.4 421.4 271.7 465.4 306.2 491.7C309.4 494.1 314.1 495.9 320.2 495.9C326.3 495.9 331 494.1 334.2 491.7C368.7 465.4 419 421.3 460.1 371.4C496.3 327.5 528.2 279 528.2 229.1C528.2 182.1 490.1 144 443.1 144z"
+                  />
+                </svg>
+              </button>
             </div>
             <div className="flex justify-end mb-4">
-              <select className="p-2 px-4 border rounded-full" value={currency} onChange={(e)=>setCurrency(e.target.value)}>
+              <select
+                className="p-2 px-4 border rounded-full"
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+              >
                 <option value="usd">USD</option>
                 <option value="eur">EUR</option>
                 <option value="gbp">GBP</option>
@@ -293,19 +335,30 @@ setIsWatchlisted((prev) => !prev);
                       #{coin?.market_data.market_cap_rank.toLocaleString()}
                     </td>
                     <td className="px-4 py-3 text-center text-gray-900 dark:text-gray-100">
-                      {symbol}{coin?.market_data.current_price[currency]?.toLocaleString()}
+                      {symbol}
+                      {coin?.market_data.current_price[
+                        currency
+                      ]?.toLocaleString()}
                     </td>
                     <td className="px-4 py-3 text-center text-gray-900 dark:text-gray-100">
-                      {symbol}{coin?.market_data.market_cap[currency]?.toLocaleString()}
+                      {symbol}
+                      {coin?.market_data.market_cap[currency]?.toLocaleString()}
                     </td>
                     <td className="px-4 py-3 text-center text-gray-900 dark:text-gray-100">
-                      {symbol}{coin?.market_data.total_volume[currency]?.toLocaleString()}
+                      {symbol}
+                      {coin?.market_data.total_volume[
+                        currency
+                      ]?.toLocaleString()}
                     </td>
                     <td className="px-4 py-3 text-center text-gray-900 dark:text-gray-100">
-                      %{coin?.market_data.price_change_percentage_24h.toFixed(2)}
+                      %
+                      {coin?.market_data.price_change_percentage_24h.toFixed(2)}
                     </td>
                     <td className="px-4 py-3 text-center text-gray-900 dark:text-gray-100">
-                      {symbol}{coin?.market_data.fully_diluted_valuation[currency].toLocaleString()}
+                      {symbol}
+                      {coin?.market_data.fully_diluted_valuation[
+                        currency
+                      ].toLocaleString()}
                     </td>
                   </tr>
                 </tbody>
@@ -316,7 +369,8 @@ setIsWatchlisted((prev) => !prev);
                     24h High
                   </span>
                   <span className="text-green-500 font-medium">
-                    {symbol}{coin?.market_data.high_24h[currency]?.toLocaleString()}
+                    {symbol}
+                    {coin?.market_data.high_24h[currency]?.toLocaleString()}
                   </span>
                 </div>
                 <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-xl flex flex-col items-center justify-center">
@@ -324,7 +378,8 @@ setIsWatchlisted((prev) => !prev);
                     24h Low
                   </span>
                   <span className="text-red-500 font-medium">
-                    {symbol}{coin?.market_data.low_24h[currency]?.toLocaleString()}
+                    {symbol}
+                    {coin?.market_data.low_24h[currency]?.toLocaleString()}
                   </span>
                 </div>
                 <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-xl flex flex-col items-center justify-center">
@@ -332,7 +387,8 @@ setIsWatchlisted((prev) => !prev);
                     All Time High
                   </span>
                   <span className="text-gray-400 font-medium">
-                    {symbol}{coin?.market_data.ath[currency]?.toLocaleString()}
+                    {symbol}
+                    {coin?.market_data.ath[currency]?.toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -384,7 +440,17 @@ setIsWatchlisted((prev) => !prev);
               <p className="text-xl">{coin?.description.en || ""}</p>
             </div>
             <div className="w-full flex justify-end gap-4 mt-6">
-              <button className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors duration-200">
+              <button
+                className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors duration-200"
+                onClick={() => {
+                  if (!user) {
+                    router.push("/login");
+                    return;
+                  }
+                  setBuyAmount("");
+                  setIsBuyModalOpen(true);
+                }}
+              >
                 Buy
               </button>
               <button className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl transition-colors duration-200">
@@ -394,6 +460,178 @@ setIsWatchlisted((prev) => !prev);
           </div>
         </div>
       </div>
+
+      {isBuyModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+          onClick={() => setIsBuyModalOpen(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="buy-modal-title"
+            className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-6 shadow-2xl dark:border-gray-700 dark:bg-gray-900"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="mb-6 flex items-center justify-between">
+              <div>
+                <h2
+                  id="buy-modal-title"
+                  className="text-2xl font-bold text-gray-900 dark:text-white"
+                >
+                  Buy {coin?.name}
+                </h2>
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  Purchase with your USD balance
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsBuyModalOpen(false)}
+                className="rounded-lg p-2 text-gray-500 transition hover:bg-gray-100 dark:hover:bg-gray-800"
+                aria-label="Close modal"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Coin Info */}
+            <div className="mb-6 flex items-center justify-between rounded-xl bg-gray-100 p-4 dark:bg-gray-800">
+              <div className="flex items-center gap-3">
+                {coin?.image?.small && (
+                  <Image
+                    src={coin.image.small}
+                    alt={coin.name}
+                    width={40}
+                    height={40}
+                  />
+                )}
+
+                <div>
+                  <p className="font-semibold text-gray-900 dark:text-white">
+                    {coin?.name}
+                  </p>
+                  <p className="text-sm uppercase text-gray-500 dark:text-gray-400">
+                    {coin?.symbol}
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-right">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Current price
+                </p>
+                <p className="font-semibold text-gray-900 dark:text-white">
+                  $
+                  {coinPrice.toLocaleString("en-US", {
+                    maximumFractionDigits: 8,
+                  })}
+                </p>
+              </div>
+            </div>
+
+            {/* Available Balance */}
+            <div className="mb-4 flex justify-between text-sm">
+              <span className="text-gray-500 dark:text-gray-400">
+                Available balance
+              </span>
+              <span className="font-semibold text-gray-900 dark:text-white">
+                $
+                {(user?.usdBalance ?? 0).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </span>
+            </div>
+
+            {/* Amount Input */}
+            <label
+              htmlFor="buy-amount"
+              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              Amount in USD
+            </label>
+
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                $
+              </span>
+
+              <input
+                id="buy-amount"
+                type="number"
+                min="0.01"
+                step="any"
+                max={user?.usdBalance ?? 0}
+                value={buyAmount}
+                onChange={(e) => setBuyAmount(e.target.value)}
+                placeholder="Enter amount"
+                className="w-full rounded-xl border border-gray-300 bg-white py-3 pl-9 pr-4 text-gray-900 outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+            </div>
+
+            {/* Purchase Summary */}
+            <div className="my-5 space-y-3 rounded-xl border border-gray-200 p-4 dark:border-gray-700">
+              <div className="flex justify-between gap-3 text-sm">
+                <span className="text-gray-500 dark:text-gray-400">
+                  You will receive
+                </span>
+                <span className="font-semibold text-gray-900 dark:text-white">
+                  {receivedCoin.toLocaleString("en-US", {
+                    maximumFractionDigits: 8,
+                  })}{" "}
+                  {coin?.symbol?.toUpperCase()}
+                </span>
+              </div>
+
+              <div className="flex justify-between gap-3 text-sm">
+                <span className="text-gray-500 dark:text-gray-400">
+                  Estimated fee
+                </span>
+                <span className="text-gray-900 dark:text-white">$0.00</span>
+              </div>
+            </div>
+
+            {amount > (user?.usdBalance ?? 0) && amount > 0 && (
+              <p className="mb-4 text-sm text-red-500">
+                Insufficient USD balance.
+              </p>
+            )}
+
+            {/* Actions */}
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setIsBuyModalOpen(false)}
+                className="flex-1 rounded-xl border border-gray-300 px-4 py-3 font-semibold text-gray-700 transition hover:bg-gray-100 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                disabled={
+                  !Number.isFinite(amount) ||
+                  amount <= 0 ||
+                  amount > (user?.usdBalance ?? 0) ||
+                  coinPrice <= 0
+                }
+                onClick={handleBuy}
+                className="flex-1 rounded-xl bg-green-600 px-4 py-3 font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Confirm Purchase
+              </button>
+            </div>
+
+            <p className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
+              Demo interface. No real purchase is made yet.
+            </p>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </React.Fragment>
   );

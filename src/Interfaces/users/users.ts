@@ -20,6 +20,7 @@ export interface IUser{
     usdBalance:number;
 
     balances:{
+        coinId:string;
         symbol:string;
         amount:number;
     }[];
