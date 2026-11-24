@@ -32,8 +32,8 @@ export default function TopCoins() {
       )}
       {!error && !isLoading && (
         <>
-          <div className="bg-linear-to-r from-green-500 to-green-600 dark:bg-gray-800 rounded-2xl p-5 shadow-lg hover:shadow-xl transition">
-            <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">
+          <div className=" dark:bg-gray-800 rounded-2xl p-5 shadow-2xl hover:shadow-xl transition">
+            <h3 className="text-lg font-semibold mb-3 text-green-600 dark:text-gray-100">
               Top Gainers (24h)
             </h3>
             <ul className="space-y-2">
@@ -42,7 +42,7 @@ export default function TopCoins() {
                   <span className="text-gray-600 dark:text-gray-300">
                     {coin.name} ({coin.symbol})
                   </span>
-                  <span className="text-green-500 font-bold">
+                  <span className="text-green-600 font-bold">
                     %{coin.price_change_percentage_24h?.toFixed(2) ?? "0.00"}
                   </span>
                 </li>
@@ -50,8 +50,8 @@ export default function TopCoins() {
             </ul>
           </div>
 
-          <div className="bg-linear-to-r from-red-600  to-red-500 dark:bg-gray-800 rounded-2xl p-5 shadow-lg hover:shadow-xl transition">
-            <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">
+          <div className=" dark:bg-gray-800 rounded-2xl p-5 shadow-2xl hover:shadow-xl transition">
+            <h3 className="text-lg text-red-600 font-semibold mb-3  dark:text-gray-100">
               Top Losers (24h)
             </h3>
             <ul className="space-y-2">
@@ -60,7 +60,7 @@ export default function TopCoins() {
                   <span className="text-gray-600 dark:text-gray-300">
                     {coin.name} ({coin.symbol})
                   </span>
-                  <span className="text-red-700 font-bold">
+                  <span className="text-red-600 font-bold">
                     %{coin.price_change_percentage_24h?.toFixed(2) ?? "0.00"}
                   </span>
                 </li>
@@ -68,15 +68,15 @@ export default function TopCoins() {
             </ul>
           </div>
 
-          <div className="bg-linear-to-r from-white to-gray-500 dark:bg-gray-800 rounded-2xl p-5 shadow-lg hover:shadow-xl transition flex flex-col">
-            <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">
+          <div className=" dark:bg-gray-800 rounded-2xl p-5 shadow-lg hover:shadow-xl transition flex flex-col">
+            <h3 className="text-lg font-semibold mb-3 text-gray-500 dark:text-gray-100">
               Global Market Cap
             </h3>
 
             <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-gray-400 gap-5">
               {charts?.coins.map((chart, index) => (
                 <div className="w-full" key={index}>
-                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2 text-center">
+                  <h4 className="text-lg font-semibold text-gray-600 dark:text-gray-100 mb-2 text-center">
                     {chart_coins[index].toUpperCase()}
                   </h4>
                   <Chart
