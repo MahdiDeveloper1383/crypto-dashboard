@@ -9,7 +9,7 @@ import React, { useEffect, useMemo, useState } from "react";
 const ITEMS_PER_PAGE = 5;
 
 export default function Watchlist() {
-  const { user } = useUser();
+  const { user,setUser } = useUser();
   const { setSearch, search } = useCoinFilterStore();
 
   const [watchlist, setWatchlist] = useState<string[]>([]);
@@ -49,36 +49,48 @@ export default function Watchlist() {
 
   // Delete a coin from the user's watchlist
 
-  async function handleRemoveCoin(coinId: string) {
-    setError("");
-    setDeletingCoin(coinId);
+ async function handleRemoveCoin(coinId: string) {
+  setError("");
+  setDeletingCoin(coinId);
 
-    try {
-      const response = await fetch("/api/users/watchlist", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ coinId }),
-      });
+  try {
+    const response = await fetch("/api/users/watchlist", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ coinId }),
+    });
 
-      const result = await response.json();
+    const result = await response.json();
 
-      if (!response.ok) {
-        throw new Error(
-          result.message ?? "Failed to remove coin from watchlist.",
-        );
-      }
-
-      // Update the UI only after the API confirms success
-      setWatchlist(result.watchlist);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
-    } finally {
-      setDeletingCoin(null);
+    if (!response.ok) {
+      throw new Error(
+        result.message ?? "Failed to remove coin from watchlist."
+      );
     }
-  }
 
+    // Update AuthContext
+    setUser((prev) =>
+      prev
+        ? {
+            ...prev,
+            watchlist: result.watchlist,
+          }
+        : prev
+    );
+
+    // Update local UI state
+    setWatchlist(result.watchlist);
+
+  } catch (err) {
+    setError(
+      err instanceof Error ? err.message : "Something went wrong."
+    );
+  } finally {
+    setDeletingCoin(null);
+  }
+}
   return (
     <div className="space-y-8">
       {/* Header */}

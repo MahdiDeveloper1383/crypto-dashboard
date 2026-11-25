@@ -18,7 +18,7 @@ export default function Coin({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
   const router = useRouter();
   const { data: coin, isLoading, error } = UseCoin({ coin: id });
-  const { user } = useUser();
+  const { user,setUser } = useUser();
   const [isWatchlisted, setIsWatchlisted] = useState(false);
   const [isBuyModalOpen, setIsBuyModalOpen] = useState(false);
   const [buyAmount, setBuyAmount] = useState("");
@@ -57,39 +57,45 @@ export default function Coin({ params }: { params: Promise<{ id: string }> }) {
     }
     setIsWatchlisted((prev) => !prev);
   }
- 
-async function handleBuy() {
-  try {
-    const response = await fetch("/api/users/wallet/buy", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        coinId: coin?.id,
-        usdAmount: Number(buyAmount),
-      }),
-    });
 
-    const data = await response.json();
+  async function handleBuy() {
+    try {
+      const response = await fetch("/api/users/wallet/buy", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          coinId: coin?.id,
+          usdAmount: Number(buyAmount),
+        }),
+      });
 
-    console.log("Status:", response.status);
-    console.log("API Response:", data);
+      const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.message || "Purchase failed");
+      console.log("Status:", response.status);
+      console.log("API Response:", data);
+
+      if (!response.ok) {
+        throw new Error(data.message || "Purchase failed");
+      }
+        setUser((prev) =>
+  prev
+    ? {
+        ...prev,
+        balances: data.wallet.balances,
+      }
+    : prev
+);
+
+      console.log("Purchase successful:", data);
+
+      setIsBuyModalOpen(false);
+      setBuyAmount("");
+    } catch (error) {
+      console.error("Purchase error:", error);
     }
-
-    console.log("Purchase successful:", data);
-
-    setIsBuyModalOpen(false);
-    setBuyAmount("");
-
-  } catch (error) {
-    console.error("Purchase error:", error);
   }
-}
-
 
   return (
     <React.Fragment>
