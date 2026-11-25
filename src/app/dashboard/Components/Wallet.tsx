@@ -165,17 +165,73 @@ export default function Wallet() {
                   <th className="px-4 py-3 text-left">Market Cap</th>
                   <th className="px-4 py-3 text-left">Markt Rank</th>
                   <th className="px-4 py-3 text-left">Volume</th>
-                  <th className="px-4 py-3 text-left">Total Supply</th>
+                  <th className="px-4 py-3 text-left">Your Asset</th>
+                  <th className="px-4 py-3 text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {userAssets.map((coin, index) => (
-                  <CoinsSmmryCard
+                  <tr
                     key={coin.id}
-                    coin={coin}
-                    index={index}
-                    symbol="$"
-                  />
+                    className="text-sm cursor-pointer hover:bg-gray-200"
+                  >
+                    <td className="px-4 py-3 text-center">{index + 1}</td>
+
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={coin.image}
+                          alt={coin.name}
+                          className="w-8 h-8"
+                        />
+                        <div>
+                          <p className="font-semibold">{coin.name}</p>
+                          <p className="text-gray-500 uppercase">
+                            {coin.symbol}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="px-4 py-3">
+                      ${coin.current_price.toLocaleString()}
+                    </td>
+
+                    <td className="px-4 py-3">
+                      {coin.price_change_percentage_24h?.toFixed(2)}%
+                    </td>
+
+                    <td className="px-4 py-3">
+                      ${coin.market_cap.toLocaleString()}
+                    </td>
+
+                    <td className="px-4 py-3">#{coin.market_cap_rank}</td>
+
+                    <td className="px-4 py-3">
+                      ${coin.total_volume.toLocaleString()}
+                    </td>
+
+                    <td className="px-4 py-3">
+                      <p className="font-semibold">
+                        {coin.amount} {coin.symbol.toUpperCase()}
+                      </p>
+                      <p className="text-gray-500 text-xs">
+                        $
+                        {(coin.amount * coin.current_price).toLocaleString(
+                          "en-US",
+                          { maximumFractionDigits: 2 },
+                        )}
+                      </p>
+                    </td>
+                    <td className="w-full  flex justify-end gap-4 mt-6">
+                      <button className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors duration-200">
+                        Buy
+                      </button>
+                      <button className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl transition-colors duration-200">
+                        Sell
+                      </button>
+                    </td>
+                  </tr>
                 ))}
               </tbody>
             </table>
