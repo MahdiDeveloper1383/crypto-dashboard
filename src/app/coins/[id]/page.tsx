@@ -13,20 +13,15 @@ import { getCurrencySymbol } from "@/utils/CurrenySymbol";
 import { ICoin } from "@/Interfaces/crypto/coin";
 import { useUser } from "@/Hooks/UseUser";
 import { useRouter } from "next/navigation";
+import CoinTrade from "@/Components/Trade/CoinTrade";
 
 export default function Coin({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
   const router = useRouter();
   const { data: coin, isLoading, error } = UseCoin({ coin: id });
-  const { user,setUser } = useUser();
+  const { user, setUser } = useUser();
   const [isWatchlisted, setIsWatchlisted] = useState(false);
-  const [isBuyModalOpen, setIsBuyModalOpen] = useState(false);
-  const [buyAmount, setBuyAmount] = useState("");
-  const coinPrice = coin?.market_data.current_price.usd ?? 0;
 
-  const amount = Number(buyAmount);
-
-  const receivedCoin = coinPrice > 0 && amount > 0 ? amount / coinPrice : 0;
   React.useEffect(() => {
     if (user && coin) {
       setIsWatchlisted(user.watchlist?.includes(coin.id) ?? false);
@@ -56,45 +51,6 @@ export default function Coin({ params }: { params: Promise<{ id: string }> }) {
       return;
     }
     setIsWatchlisted((prev) => !prev);
-  }
-
-  async function handleBuy() {
-    try {
-      const response = await fetch("/api/users/wallet/buy", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          coinId: coin?.id,
-          usdAmount: Number(buyAmount),
-        }),
-      });
-
-      const data = await response.json();
-
-      console.log("Status:", response.status);
-      console.log("API Response:", data);
-
-      if (!response.ok) {
-        throw new Error(data.message || "Purchase failed");
-      }
-        setUser((prev) =>
-  prev
-    ? {
-        ...prev,
-        balances: data.wallet.balances,
-      }
-    : prev
-);
-
-      console.log("Purchase successful:", data);
-
-      setIsBuyModalOpen(false);
-      setBuyAmount("");
-    } catch (error) {
-      console.error("Purchase error:", error);
-    }
   }
 
   return (
@@ -445,198 +401,22 @@ export default function Coin({ params }: { params: Promise<{ id: string }> }) {
               </h4>
               <p className="text-xl">{coin?.description.en || ""}</p>
             </div>
-            <div className="w-full flex justify-end gap-4 mt-6">
-              <button
-                className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors duration-200"
-                onClick={() => {
-                  if (!user) {
-                    router.push("/login");
-                    return;
-                  }
-                  setBuyAmount("");
-                  setIsBuyModalOpen(true);
+            {coin && (
+              <CoinTrade
+                coin={{
+                  id: coin.id,
+                  name: coin.name,
+                  symbol: coin.symbol,
+                  image: coin.image.large,
                 }}
-              >
-                Buy
-              </button>
-              <button className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl transition-colors duration-200">
-                Sell
-              </button>
-            </div>
+                coinPrice={coin.market_data.current_price.usd}
+                user={user}
+                setUser={setUser}
+              />
+            )}
           </div>
         </div>
       </div>
-
-      {isBuyModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
-          onClick={() => setIsBuyModalOpen(false)}
-        >
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="buy-modal-title"
-            className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-6 shadow-2xl dark:border-gray-700 dark:bg-gray-900"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="mb-6 flex items-center justify-between">
-              <div>
-                <h2
-                  id="buy-modal-title"
-                  className="text-2xl font-bold text-gray-900 dark:text-white"
-                >
-                  Buy {coin?.name}
-                </h2>
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                  Purchase with your USD balance
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setIsBuyModalOpen(false)}
-                className="rounded-lg p-2 text-gray-500 transition hover:bg-gray-100 dark:hover:bg-gray-800"
-                aria-label="Close modal"
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Coin Info */}
-            <div className="mb-6 flex items-center justify-between rounded-xl bg-gray-100 p-4 dark:bg-gray-800">
-              <div className="flex items-center gap-3">
-                {coin?.image?.small && (
-                  <Image
-                    src={coin.image.small}
-                    alt={coin.name}
-                    width={40}
-                    height={40}
-                  />
-                )}
-
-                <div>
-                  <p className="font-semibold text-gray-900 dark:text-white">
-                    {coin?.name}
-                  </p>
-                  <p className="text-sm uppercase text-gray-500 dark:text-gray-400">
-                    {coin?.symbol}
-                  </p>
-                </div>
-              </div>
-
-              <div className="text-right">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Current price
-                </p>
-                <p className="font-semibold text-gray-900 dark:text-white">
-                  $
-                  {coinPrice.toLocaleString("en-US", {
-                    maximumFractionDigits: 8,
-                  })}
-                </p>
-              </div>
-            </div>
-
-            {/* Available Balance */}
-            <div className="mb-4 flex justify-between text-sm">
-              <span className="text-gray-500 dark:text-gray-400">
-                Available balance
-              </span>
-              <span className="font-semibold text-gray-900 dark:text-white">
-                $
-                {(user?.usdBalance ?? 0).toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </span>
-            </div>
-
-            {/* Amount Input */}
-            <label
-              htmlFor="buy-amount"
-              className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Amount in USD
-            </label>
-
-            <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
-                $
-              </span>
-
-              <input
-                id="buy-amount"
-                type="number"
-                min="0.01"
-                step="any"
-                max={user?.usdBalance ?? 0}
-                value={buyAmount}
-                onChange={(e) => setBuyAmount(e.target.value)}
-                placeholder="Enter amount"
-                className="w-full rounded-xl border border-gray-300 bg-white py-3 pl-9 pr-4 text-gray-900 outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-              />
-            </div>
-
-            {/* Purchase Summary */}
-            <div className="my-5 space-y-3 rounded-xl border border-gray-200 p-4 dark:border-gray-700">
-              <div className="flex justify-between gap-3 text-sm">
-                <span className="text-gray-500 dark:text-gray-400">
-                  You will receive
-                </span>
-                <span className="font-semibold text-gray-900 dark:text-white">
-                  {receivedCoin.toLocaleString("en-US", {
-                    maximumFractionDigits: 8,
-                  })}{" "}
-                  {coin?.symbol?.toUpperCase()}
-                </span>
-              </div>
-
-              <div className="flex justify-between gap-3 text-sm">
-                <span className="text-gray-500 dark:text-gray-400">
-                  Estimated fee
-                </span>
-                <span className="text-gray-900 dark:text-white">$0.00</span>
-              </div>
-            </div>
-
-            {amount > (user?.usdBalance ?? 0) && amount > 0 && (
-              <p className="mb-4 text-sm text-red-500">
-                Insufficient USD balance.
-              </p>
-            )}
-
-            {/* Actions */}
-            <div className="flex gap-3">
-              <button
-                type="button"
-                onClick={() => setIsBuyModalOpen(false)}
-                className="flex-1 rounded-xl border border-gray-300 px-4 py-3 font-semibold text-gray-700 transition hover:bg-gray-100 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
-              >
-                Cancel
-              </button>
-
-              <button
-                type="button"
-                disabled={
-                  !Number.isFinite(amount) ||
-                  amount <= 0 ||
-                  amount > (user?.usdBalance ?? 0) ||
-                  coinPrice <= 0
-                }
-                onClick={handleBuy}
-                className="flex-1 rounded-xl bg-green-600 px-4 py-3 font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Confirm Purchase
-              </button>
-            </div>
-
-            <p className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
-              Demo interface. No real purchase is made yet.
-            </p>
-          </div>
-        </div>
-      )}
 
       <Footer />
     </React.Fragment>

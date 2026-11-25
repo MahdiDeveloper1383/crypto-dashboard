@@ -1,4 +1,4 @@
-import CoinsSmmryCard from "@/Components/Cards/CoinsSmmryCard";
+import CoinTrade from "@/Components/Trade/CoinTrade";
 import { useUser } from "@/Hooks/UseUser";
 import { UseMarket } from "@/react-query/UseMarket";
 import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
@@ -223,13 +223,13 @@ export default function Wallet() {
                         )}
                       </p>
                     </td>
-                    <td className="w-full  flex justify-end gap-4 mt-6">
-                      <button className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors duration-200">
-                        Buy
-                      </button>
-                      <button className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl transition-colors duration-200">
-                        Sell
-                      </button>
+                    <td className="w-full flex justify-end gap-4 mt-6">
+                      <CoinTrade
+                        coin={coin}
+                        coinPrice={coin.current_price}
+                        user={user}
+                        setUser={setUser}
+                      />
                     </td>
                   </tr>
                 ))}
