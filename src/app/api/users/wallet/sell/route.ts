@@ -82,25 +82,34 @@ export async function POST(req: Request) {
 
     // 6. Calculate selling value
     const total = amount * coinPrice;
+    // 7. Calculate remaining investment and coin amount
+    const costToRemove =
+      (amount / existingCoin.amount) * (existingCoin.investedUsd ?? 0);
 
-    // 7. Update coin balance
     const remainingAmount = existingCoin.amount - amount;
 
+    const remainingInvestedUsd = Math.max(
+      0,
+      (existingCoin.investedUsd ?? 0) - costToRemove,
+    );
+
+    // 8. Update coin balance
     const updatedBalances = balances
       .map((item) =>
         item.coinId === coinId
           ? {
               ...item,
               amount: remainingAmount,
+              investedUsd: remainingInvestedUsd,
             }
           : item,
       )
       .filter((item) => item.amount > 1e-12);
 
-    // 8. Add selling value to USD balance
+    // 9. Add selling value to USD balance
     const newUsdBalance = currentUser.usdBalance + total;
 
-    // 9. Save updated wallet
+    // 10. Save updated wallet
     const { data: updatedUser } = await axios.patch<IUser>(
       `${process.env.NEXT_PUBLIC_API_URL}/users/${currentUser.id}`,
       {
@@ -109,7 +118,7 @@ export async function POST(req: Request) {
       },
     );
 
-    // 10. Return updated wallet
+    // 11. Return updated wallet
     return NextResponse.json({
       success: true,
       message: "Sale completed successfully",

@@ -80,11 +80,13 @@ export async function POST(req: Request) {
 
     if (existingCoin) {
       existingCoin.amount += quantity;
+      existingCoin.investedUsd += usdAmount
     } else {
       balances.push({
         coinId,
         symbol,
         amount: quantity,
+        investedUsd:usdAmount
       });
     }
 

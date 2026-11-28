@@ -1,4 +1,3 @@
-import { ICoin } from "@/Interfaces/crypto/coin";
 import { WalletCoin } from "@/Interfaces/crypto/wallet";
 import Image from "next/image";
 

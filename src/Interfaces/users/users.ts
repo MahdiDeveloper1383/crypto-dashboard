@@ -23,6 +23,7 @@ export interface IUser{
         coinId:string;
         symbol:string;
         amount:number;
+        investedUsd:number;
     }[];
 
     watchlist:string[];
